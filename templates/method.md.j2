@@ -1,0 +1,23 @@
+#### {{ name }}
+
+Request type: `
+{%- if client_streaming && server_streaming -%}
+bidirectional streaming
+{%- else if client_streaming -%}
+client streaming
+{%- else if server_streaming -%}
+server streaming
+{%- else -%}
+unary
+{%- endif -%}
+`
+
+{{ description }}
+
+##### Input
+
+{{ input }}
+
+##### Output
+
+{{ output }}

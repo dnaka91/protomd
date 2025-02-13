@@ -1,0 +1,32 @@
+[package]
+name = "protomd"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+camino = "1.1.9"
+clap = { version = "4.5.31", features = ["derive", "wrap_help"] }
+color-eyre = { version = "0.6.3", default-features = false }
+confique = { version = "0.3.0", features = ["toml"] }
+indexmap = "2.7.1"
+itertools = "0.14.0"
+log = "0.4.26"
+parking_lot = "0.12.3"
+prost = "0.13.5"
+prost-types = "0.13.5"
+protox = "0.7.2"
+rayon = "1.10.0"
+rinja = "0.3.5"
+toml = "0.8.20"
+unindent = "0.2.3"
+walkdir = "2.5.0"
+
+[build-dependencies]
+clap = { version = "4.5.31", features = ["derive"] }
+clap_complete = "4.5.46"
+clap_mangen = "0.2.26"
+
+[profile.release]
+lto = "thin"
+strip = true

@@ -1,0 +1,14 @@
+## {{ package }}.{{ name }}
+
+{{ description }}
+
+### Methods
+{% for method in methods %}
+- [{{ method.name }}](#{{ method.name|lower }})
+
+{%- endfor %}
+{% for method in methods %}
+---
+
+{{ method }}
+{% endfor -%}

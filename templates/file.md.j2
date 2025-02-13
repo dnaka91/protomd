@@ -1,0 +1,11 @@
+{%- if !config.frontmatter.trim().is_empty() -%}
+---
+{{ config.frontmatter|trim }}
+---
+{%- endif %}
+
+# {{ package }}.{{ name }}
+
+{% for service in services -%}
+{{ service }}
+{%- endfor -%}
