@@ -16,8 +16,12 @@ unary
 
 ##### Input
 
-{{ input }}
+{% for message in input.values() %}
+{{ message }}
+{% endfor %}
 
 ##### Output
 
-{{ output }}
+{% for message in output.values() %}
+{{ message }}
+{% endfor %}

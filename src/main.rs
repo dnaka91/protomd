@@ -60,6 +60,7 @@ fn main() -> Result<()> {
 
     let compiler = {
         let mut c = Compiler::with_file_resolver(resolver.clone());
+        c.include_imports(true);
         c.include_source_info(true);
         c.open_files(files)?;
         c
