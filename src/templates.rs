@@ -1,4 +1,3 @@
-use camino::Utf8Path;
 use color_eyre::eyre::{ContextCompat, Result};
 use itertools::Itertools;
 use protox::{
@@ -10,39 +9,39 @@ use rinja::Template;
 use crate::config;
 
 #[derive(Template)]
-#[template(path = "file.md.j2")]
-pub struct ProtoFile {
-    pub config: config::Conf,
-    pub package: String,
-    pub name: String,
+#[template(path = "package.md.j2")]
+pub struct Package {
+    config: config::Conf,
+    name: String,
     services: Vec<Service>,
 }
 
-impl ProtoFile {
+impl Package {
     pub fn new(
         config: config::Conf,
         resolver: &impl FileResolver,
-        value: &FileDescriptor,
+        name: String,
+        value: &[FileDescriptor],
     ) -> Result<Self> {
         Ok(Self {
             config,
-            package: value.package_name().to_owned(),
-            name: Utf8Path::new(value.name())
-                .file_name()
-                .context("no file name")?
-                .to_owned(),
+            name,
             services: value
-                .services()
+                .iter()
+                .flat_map(FileDescriptor::services)
                 .map(|v| Service::new(resolver, &v))
                 .collect::<Result<_>>()?,
         })
+    }
+
+    pub fn file_name(&self) -> String {
+        format!("{}.md", self.name)
     }
 }
 
 #[derive(Template)]
 #[template(path = "service.md.j2")]
 struct Service {
-    package: String,
     name: String,
     description: String,
     methods: Vec<Method>,
@@ -64,7 +63,6 @@ impl Service {
             .unwrap_or_default();
 
         Ok(Self {
-            package: value.package_name().to_owned(),
             name: value.name().to_owned(),
             description,
             methods: value

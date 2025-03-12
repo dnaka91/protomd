@@ -25,6 +25,7 @@ use color_eyre::{
     eyre::{self, Context, Result, eyre},
 };
 use indexmap::IndexSet;
+use itertools::Itertools;
 use log::warn;
 use protox::{
     Compiler,
@@ -35,7 +36,7 @@ use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use rinja::Template;
 use walkdir::WalkDir;
 
-use self::{cli::Cli, resolver::CachingFileResolver, templates::ProtoFile};
+use self::{cli::Cli, resolver::CachingFileResolver, templates::Package};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -69,11 +70,15 @@ fn main() -> Result<()> {
         .map(|f| (f.name(), f))
         .collect::<HashMap<_, _>>();
 
-    let templates = compiler
+    let packages = compiler
         .descriptor_pool()
         .files()
         .filter(|file| should_generate(&metadata, file))
-        .map(|file| ProtoFile::new(config.clone(), &resolver, &file))
+        .into_group_map_by(|file| file.package_name().to_owned());
+
+    let templates = packages
+        .into_iter()
+        .map(|(name, files)| Package::new(config.clone(), &resolver, name, &files))
         .collect::<Result<Vec<_>, _>>()?;
 
     if cli.clean {
@@ -83,7 +88,7 @@ fn main() -> Result<()> {
     fs::create_dir_all(&cli.output_dir).ok();
 
     templates.into_par_iter().try_for_each(|template| {
-        let output_name = format!("{}.{}.md", template.package, template.name);
+        let output_name = template.file_name();
         let file = File::create(cli.output_dir.join(output_name))?;
         let mut file = BufWriter::with_capacity(256 * 1024, file);
 
