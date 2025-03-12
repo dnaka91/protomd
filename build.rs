@@ -1,8 +1,10 @@
+use std::{
+    env, fs, io,
+    path::{Path, PathBuf},
+};
+
 use clap::{CommandFactory, ValueEnum};
 use clap_complete::Shell;
-use std::io;
-use std::path::{Path, PathBuf};
-use std::{env, fs};
 
 mod cli {
     include!("src/cli.rs");

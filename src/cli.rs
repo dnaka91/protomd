@@ -11,9 +11,9 @@ pub struct Cli {
     ///
     /// If the directory doesn't exist, it will be created automatically.
     ///
-    /// Any existing files will be overwritten without warning. Therefore, be careful if pointing to
-    /// a directory that already includes other files. Files that don't have any overlapping name
-    /// remain untouched.
+    /// Any existing files will be overwritten without warning. Therefore, be careful if pointing
+    /// to a directory that already includes other files. Files that don't have any overlapping
+    /// name remain untouched.
     ///
     /// Use the `--clean` flag to wipe the output directory before generating the new files.
     #[arg(short, long, value_hint = ValueHint::DirPath, default_value_os_t = PathBuf::from("."))]
