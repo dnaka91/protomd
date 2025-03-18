@@ -5,8 +5,13 @@ use clap::{Parser, ValueHint};
 /// Markdow generator for Protobuf schema files.
 #[derive(Parser)]
 pub struct Cli {
+    /// Directories that will be searched for referenced schema files.
+    ///
+    /// Input files can reference other schemas that might not be part of the total list of input
+    /// files. Each include path given will be tried when locating the include files.
     #[arg(short = 'I', long, value_hint = ValueHint::DirPath)]
     pub include: Vec<PathBuf>,
+
     /// Directory to write the generated files into.
     ///
     /// If the directory doesn't exist, it will be created automatically.
@@ -18,13 +23,22 @@ pub struct Cli {
     /// Use the `--clean` flag to wipe the output directory before generating the new files.
     #[arg(short, long, value_hint = ValueHint::DirPath, default_value_os_t = PathBuf::from("."))]
     pub output_dir: PathBuf,
+
     /// Remove any content from the output directory before writing any files to it. This is not
     /// done when the output directory points to the current directory.
     #[arg(long)]
     pub clean: bool,
+
     /// Initialize a new configuration file under the current working directory.
+    ///
+    /// If the file already exists, it will not be overwritten but an error be printed out instead.
+    /// To overwrite an existing configuration, delete it first and then run the command again.
+    ///
+    /// Using this flag will ignore all other arguments, only generate the initial configuration
+    /// file and then exit.
     #[arg(long)]
     pub init: bool,
+
     /// Input files or folders to generate the documentation from.
     ///
     /// In case of a file, it is only included if it has a `*.proto` extension. However, if pointed
