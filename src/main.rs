@@ -20,10 +20,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use color_eyre::{
-    Section,
-    eyre::{self, Context, Result, eyre},
-};
+use anyhow::{Context, Result, bail};
 use indexmap::IndexSet;
 use itertools::Itertools;
 use log::warn;
@@ -39,14 +36,11 @@ use walkdir::WalkDir;
 use self::{cli::Cli, resolver::CachingFileResolver, templates::Package};
 
 fn main() -> Result<()> {
-    color_eyre::install()?;
-
     let cli = Cli::parse();
 
     if cli.init {
         if std::fs::exists("protomd.toml")? {
-            return Err(eyre!("A configuration file `protomd.toml` already exists")
-                .suggestion("Consider deleting the existing file and run the command again"));
+            bail!("A configuration file `protomd.toml` already exists");
         }
 
         std::fs::write("protomd.toml", config::template())?;
@@ -96,7 +90,7 @@ fn main() -> Result<()> {
         template.write_into(&mut file)?;
         file.flush()?;
 
-        eyre::Ok(())
+        anyhow::Ok(())
     })?;
 
     Ok(())

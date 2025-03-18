@@ -1,4 +1,4 @@
-use color_eyre::eyre::Result;
+use anyhow::Result;
 use confique::{Config, toml::FormatOptions};
 
 /// Configuration for the protomd Protobuf Markdown generator.

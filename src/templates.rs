@@ -1,4 +1,4 @@
-use color_eyre::eyre::{ContextCompat, Result};
+use anyhow::{Context, Result};
 use indexmap::IndexMap;
 use itertools::Itertools;
 use protox::{
