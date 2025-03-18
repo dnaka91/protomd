@@ -1,8 +1,9 @@
-{%- if !config.frontmatter.trim().is_empty() -%}
+{% if !config.frontmatter.trim().is_empty() -%}
 ---
 {{ config.frontmatter|trim }}
 ---
-{%- endif %}
+
+{% endif -%}
 
 # {{ name }}
 

@@ -1,0 +1,2 @@
+bin.name = "protomd"
+args = "--init"

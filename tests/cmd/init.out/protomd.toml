@@ -1,0 +1,11 @@
+# Configuration for the protomd Protobuf Markdown generator.
+
+# Optional frontmatter to place at the beginning of each generated file.
+#
+# For example, in Vitepress you can configure the outline level for the navigation sidebar by
+# adding the following configuration as frontmatter:
+#
+# frontmatter = "outline: [2, 4]"
+#
+# Default value: ""
+#frontmatter = ""
