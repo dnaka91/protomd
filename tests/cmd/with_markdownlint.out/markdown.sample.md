@@ -7,19 +7,19 @@
 
 The simplest server.
 
-### Methods
+### Methods {#simpleservice-methods}
 
 - [Call](#call)
 
 ---
 
-#### Call
+#### Call {#simpleservice-call}
 
 Request type: `unary`
 
 Call it!
 
-##### Input
+##### Input {#simpleservice-call-input}
 
 This is a simple message.
 
@@ -30,7 +30,7 @@ message Simple {
 }
 ```
 
-##### Output
+##### Output {#simpleservice-call-output}
 
 This is a simple message.
 

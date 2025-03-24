@@ -1,4 +1,4 @@
-#### {{ name }}
+#### {{ name }} {{ "{#" }}{{ service|slugify }}-{{ name|slugify }}}
 
 Request type: `
 {%- if client_streaming && server_streaming -%}
@@ -14,14 +14,14 @@ unary
 
 {{ description }}
 
-##### Input
+##### Input {{ "{#" }}{{ service|slugify }}-{{ name|slugify }}-input}
 
 {%- for message in input.values() %}
 
 {{ message }}
 {%- endfor %}
 
-##### Output
+##### Output {{ "{#" }}{{ service|slugify }}-{{ name|slugify }}-output}
 
 {%- for message in output.values() %}
 

@@ -12,6 +12,14 @@ use rinja::Template;
 
 use crate::config;
 
+mod filters {
+    #![allow(clippy::unnecessary_wraps)]
+
+    pub fn slugify(s: impl AsRef<str>) -> rinja::Result<String> {
+        Ok(slug::slugify(s))
+    }
+}
+
 #[derive(Template)]
 #[template(path = "package.md.j2")]
 pub struct Package {
@@ -80,6 +88,7 @@ impl Service {
 #[derive(Template)]
 #[template(path = "method.md.j2")]
 struct Method {
+    service: String,
     name: String,
     description: String,
     input: IndexMap<String, Message>,
@@ -105,6 +114,7 @@ impl Method {
             .unwrap_or_default();
 
         Ok(Self {
+            service: value.parent_service().name().to_owned(),
             name: value.name().to_owned(),
             description,
             input: find_messages(resolver, value.input())?,
