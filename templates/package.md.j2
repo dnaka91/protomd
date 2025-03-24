@@ -5,6 +5,12 @@
 
 {% endif -%}
 
+{% if !config.markdownlint.disable.is_empty() -%}
+{% for disable in config.markdownlint.disable -%}
+<!-- markdownlint-disable {{ disable }} -->
+{% endfor %}
+{% endif -%}
+
 # {{ name }}
 
 {% for service in services -%}

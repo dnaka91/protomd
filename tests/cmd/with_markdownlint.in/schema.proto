@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package markdown.sample;
+
+// This is a simple message.
+message Simple {
+  // A single integer.
+  uint32 value = 1;
+}
+
+// The simplest server.
+service SimpleService {
+  // Call it!
+  rpc Call(Simple) returns (Simple);
+}

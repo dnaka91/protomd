@@ -9,3 +9,10 @@
 #
 # Default value: ""
 #frontmatter = ""
+
+# Configuration for `markdowlint`.
+[markdownlint]
+# List of rules to disable.
+#
+# Default value: []
+#disable = []

@@ -1,0 +1,2 @@
+[markdownlint]
+disable = ["rule1", "rule2"]

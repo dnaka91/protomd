@@ -12,6 +12,16 @@ pub struct Conf {
     /// frontmatter = "outline: [2, 4]"
     #[config(default = "")]
     pub frontmatter: String,
+    /// Configuration for `markdowlint`.
+    #[config(nested)]
+    pub markdownlint: Markdownlint,
+}
+
+#[derive(Clone, confique::Config)]
+pub struct Markdownlint {
+    /// List of rules to disable.
+    #[config(default = [])]
+    pub disable: Vec<String>,
 }
 
 pub fn load() -> Result<Conf> {
