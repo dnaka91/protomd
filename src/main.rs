@@ -21,6 +21,7 @@ use std::{
 };
 
 use anyhow::{Context, Result, bail};
+use askama::Template;
 use indexmap::IndexSet;
 use itertools::Itertools;
 use log::warn;
@@ -30,7 +31,6 @@ use protox::{
     prost_reflect::FileDescriptor,
 };
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use rinja::Template;
 use walkdir::WalkDir;
 
 use self::{cli::Cli, resolver::CachingFileResolver, templates::Package};

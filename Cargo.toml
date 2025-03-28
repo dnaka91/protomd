@@ -6,6 +6,7 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0.97"
+askama = "0.13.0"
 camino = "1.1.9"
 clap = { version = "4.5.32", features = ["derive", "wrap_help"] }
 confique = { version = "0.3.0", features = ["toml"] }
@@ -17,7 +18,6 @@ prost = "0.13.5"
 prost-types = "0.13.5"
 protox = "0.7.2"
 rayon = "1.10.0"
-rinja = "0.3.5"
 slug = "0.1.6"
 toml = "0.8.20"
 unindent = "0.2.4"

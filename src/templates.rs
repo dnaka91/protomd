@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use askama::Template;
 use indexmap::IndexMap;
 use itertools::Itertools;
 use protox::{
@@ -8,14 +9,13 @@ use protox::{
         ServiceDescriptor,
     },
 };
-use rinja::Template;
 
 use crate::config;
 
 mod filters {
     #![allow(clippy::unnecessary_wraps)]
 
-    pub fn slugify(s: impl AsRef<str>) -> rinja::Result<String> {
+    pub fn slugify(s: impl AsRef<str>) -> askama::Result<String> {
         Ok(slug::slugify(s))
     }
 }
