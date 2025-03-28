@@ -8,11 +8,11 @@ license = "MIT"
 anyhow = "1.0.97"
 askama = "0.13.0"
 camino = "1.1.9"
-clap = { version = "4.5.32", features = ["derive", "wrap_help"] }
+clap = { version = "4.5.35", features = ["derive", "wrap_help"] }
 confique = { version = "0.3.0", features = ["toml"] }
 indexmap = "2.8.0"
 itertools = "0.14.0"
-log = "0.4.26"
+log = "0.4.27"
 parking_lot = "0.12.3"
 prost = "0.13.5"
 prost-types = "0.13.5"
@@ -27,8 +27,8 @@ walkdir = "2.5.0"
 trycmd = "0.15.9"
 
 [build-dependencies]
-clap = { version = "4.5.32", features = ["derive"] }
-clap_complete = "4.5.46"
+clap = { version = "4.5.35", features = ["derive"] }
+clap_complete = "4.5.47"
 clap_mangen = "0.2.26"
 
 [profile.release]
