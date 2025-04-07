@@ -10,7 +10,7 @@ askama = "0.13.0"
 camino = "1.1.9"
 clap = { version = "4.5.35", features = ["derive", "wrap_help"] }
 confique = { version = "0.3.0", features = ["toml"] }
-indexmap = "2.8.0"
+indexmap = "2.9.0"
 itertools = "0.14.0"
 log = "0.4.27"
 parking_lot = "0.12.3"
