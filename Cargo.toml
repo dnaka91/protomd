@@ -31,6 +31,17 @@ clap = { version = "4.5.35", features = ["derive"] }
 clap_complete = "4.5.47"
 clap_mangen = "0.2.26"
 
+[lints.rust]
+rust_2018_idioms = { level = "deny", priority = -1 }
+rust_2024_compatibility = { level = "deny", priority = -1 }
+unstable_name_collisions = "allow"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+expect_used = "warn"
+unwrap_used = "warn"
+cast_sign_loss = "allow"
+
 [profile.release]
 lto = "thin"
 strip = true

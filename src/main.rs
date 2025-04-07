@@ -1,12 +1,3 @@
-#![warn(
-    rust_2018_idioms,
-    clippy::all,
-    clippy::pedantic,
-    clippy::expect_used,
-    clippy::unwrap_used
-)]
-#![allow(unstable_name_collisions, clippy::cast_sign_loss)]
-
 mod cli;
 mod config;
 mod resolver;

@@ -10,6 +10,7 @@ mod cli {
     include!("src/cli.rs");
 }
 
+#[allow(clippy::unwrap_used)]
 fn main() -> io::Result<()> {
     let manifest_dir = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
     completion(&manifest_dir)?;
