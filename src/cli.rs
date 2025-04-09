@@ -52,6 +52,7 @@ impl Cli {
         <Self as Parser>::parse()
     }
 }
+
 #[cfg(test)]
 mod tests {
     use crate::cli::Cli;

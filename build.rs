@@ -25,8 +25,10 @@ fn completion(base_dir: &Path) -> io::Result<()> {
     fs::create_dir_all(&out_dir).ok();
 
     let mut cmd = cli::Cli::command();
+    let bin_name = cmd.get_bin_name().unwrap_or(cmd.get_name()).to_owned();
+
     for &shell in Shell::value_variants() {
-        clap_complete::generate_to(shell, &mut cmd, "myapp", &out_dir)?;
+        clap_complete::generate_to(shell, &mut cmd, &bin_name, &out_dir)?;
     }
 
     Ok(())
