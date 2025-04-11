@@ -10,4 +10,7 @@ allow = [
 ignore = true
 
 [bans]
-skip = []
+skip = [
+    "thiserror@1",
+    "thiserror-impl@1",
+]
