@@ -5,9 +5,9 @@ edition = "2024"
 license = "MIT"
 
 [dependencies]
-anyhow = "1.0.97"
-askama = "0.13.0"
-clap = { version = "4.5.35", features = ["derive", "wrap_help"] }
+anyhow = "1.0.98"
+askama = "0.13.1"
+clap = { version = "4.5.36", features = ["derive", "wrap_help"] }
 confique = { version = "0.3.0", features = ["toml"] }
 indexmap = "2.9.0"
 itertools = "0.14.0"
@@ -23,7 +23,7 @@ walkdir = "2.5.0"
 trycmd = "0.15.9"
 
 [build-dependencies]
-clap = { version = "4.5.35", features = ["derive"] }
+clap = { version = "4.5.36", features = ["derive"] }
 clap_complete = "4.5.47"
 clap_mangen = "0.2.26"
 
