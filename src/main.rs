@@ -12,7 +12,6 @@ use std::{
 };
 
 use anyhow::{Context, Result, bail};
-use askama::Template;
 use indexmap::IndexSet;
 use itertools::Itertools;
 use log::warn;
@@ -73,12 +72,14 @@ fn main() -> Result<()> {
 
     fs::create_dir_all(&cli.output_dir).ok();
 
+    let env = templates::Env::new()?;
+
     templates.into_par_iter().try_for_each(|template| {
         let output_name = template.file_name();
         let file = File::create(cli.output_dir.join(output_name))?;
         let mut file = BufWriter::with_capacity(256 * 1024, file);
 
-        template.write_into(&mut file)?;
+        env.render(template, &mut file)?;
         file.flush()?;
 
         anyhow::Ok(())

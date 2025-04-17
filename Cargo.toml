@@ -6,14 +6,15 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0.98"
-askama = "0.13.1"
 clap = { version = "4.5.36", features = ["derive", "wrap_help"] }
 confique = { version = "0.3.0", features = ["toml"] }
-indexmap = "2.9.0"
+indexmap = { version = "2.9.0", features = ["serde"] }
 itertools = "0.14.0"
 log = "0.4.27"
+minijinja = { version = "2.9.0", features = ["preserve_order"] }
 protox = "0.8.0"
 rayon = "1.10.0"
+serde = { version = "1.0.219", features = ["derive"] }
 slug = "0.1.6"
 unindent = "0.2.4"
 walkdir = "2.5.0"

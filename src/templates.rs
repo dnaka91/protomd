@@ -1,7 +1,9 @@
+use std::io::Write;
+
 use anyhow::{Context, Result};
-use askama::Template;
 use indexmap::IndexMap;
 use itertools::Itertools;
+use minijinja::Environment;
 use protox::{
     file::FileResolver,
     prost_reflect::{
@@ -9,19 +11,37 @@ use protox::{
         ServiceDescriptor,
     },
 };
+use serde::Serialize;
 
 use crate::config;
 
 mod filters {
-    #![allow(clippy::unnecessary_wraps)]
-
-    pub fn slugify(s: impl AsRef<str>) -> askama::Result<String> {
-        Ok(slug::slugify(s))
+    pub fn slugify(s: String) -> String {
+        slug::slugify(s)
     }
 }
 
-#[derive(Template)]
-#[template(path = "package.md.j2")]
+pub struct Env(Environment<'static>);
+
+impl Env {
+    pub fn new() -> Result<Self> {
+        let mut env = Environment::new();
+        env.add_filter("slugify", filters::slugify);
+        env.add_template("package.md.j2", include_str!("../templates/package.md.j2"))?;
+
+        Ok(Self(env))
+    }
+
+    pub fn render(&self, package: Package, writer: impl Write) -> Result<()> {
+        self.0
+            .get_template("package.md.j2")?
+            .render_to_write(package, writer)
+            .map(|_| ())
+            .map_err(Into::into)
+    }
+}
+
+#[derive(Serialize)]
 pub struct Package {
     config: config::Conf,
     name: String,
@@ -51,8 +71,7 @@ impl Package {
     }
 }
 
-#[derive(Template)]
-#[template(path = "service.md.j2")]
+#[derive(Serialize)]
 struct Service {
     name: String,
     description: String,
@@ -85,10 +104,8 @@ impl Service {
     }
 }
 
-#[derive(Template)]
-#[template(path = "method.md.j2")]
+#[derive(Serialize)]
 struct Method {
-    service: String,
     name: String,
     description: String,
     input: IndexMap<String, Message>,
@@ -114,7 +131,6 @@ impl Method {
             .unwrap_or_default();
 
         Ok(Self {
-            service: value.parent_service().name().to_owned(),
             name: value.name().to_owned(),
             description,
             input: find_messages(resolver, value.input())?,
@@ -125,8 +141,7 @@ impl Method {
     }
 }
 
-#[derive(Template)]
-#[template(path = "message.md.j2")]
+#[derive(Serialize)]
 struct Message {
     description: String,
     proto: String,

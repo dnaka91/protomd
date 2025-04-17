@@ -1,11 +1,11 @@
-{% if !config.frontmatter.trim().is_empty() -%}
+{% if config.frontmatter|trim -%}
 ---
 {{ config.frontmatter|trim }}
 ---
 
 {% endif -%}
 
-{% if !config.markdownlint.disable.is_empty() -%}
+{% if config.markdownlint.disable -%}
 {% for disable in config.markdownlint.disable -%}
 <!-- markdownlint-disable {{ disable }} -->
 {% endfor %}
@@ -14,5 +14,49 @@
 # {{ name }}
 
 {% for service in services -%}
-{{ service }}
+## {{ service.name }}
+
+{{ service.description }}
+
+### Methods {{ "{#" ~ service.name|slugify ~ "-methods}" }}
+{% for method in service.methods %}
+- [{{ method.name }}](#{{ method.name|lower }})
+
+{%- endfor %}
+{% for method in service.methods %}
+---
+
+#### {{ method.name }} {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "}" }}
+
+Request type: `
+{%- if method.client_streaming and method.server_streaming -%}
+bidirectional streaming
+{%- elif method.client_streaming -%}
+client streaming
+{%- elif method.server_streaming -%}
+server streaming
+{%- else -%}
+unary
+{%- endif -%}
+`
+
+{{ method.description }}
+
+##### Input {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "-input}" }}
+{% for _, message in method.input|items %}
+{{ message.description }}
+
+```proto
+{{ message.proto }}
+```
+{% endfor %}
+##### Output {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "-output}" }}
+{% for _, message in method.output|items %}
+{{ message.description }}
+
+```proto
+{{ message.proto }}
+```
+{% endfor %}
+{%- endfor -%}
 {%- endfor -%}
