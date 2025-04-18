@@ -1,15 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Package",
+  "description": "A Protobuf package which contains services and methods. Maybe originate from multiple schema/n files.",
   "type": "object",
   "properties": {
     "config": {
+      "description": "Configuration of `protomd` and not part of the schema definition.",
       "$ref": "#/$defs/Conf"
     },
     "name": {
+      "description": "The package name.",
       "type": "string"
     },
     "services": {
+      "description": "List of services defined in the package.",
       "type": "array",
       "items": {
         "$ref": "#/$defs/Service"
@@ -56,15 +60,19 @@
       ]
     },
     "Service": {
+      "description": "A gRPC service as part of a package.",
       "type": "object",
       "properties": {
         "description": {
+          "description": "Description of the gRPC service.",
           "type": "string"
         },
         "name": {
+          "description": "Name of the gRPC service.",
           "type": "string"
         },
         "methods": {
+          "description": "List of methods the service provides.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/Method"
@@ -78,9 +86,11 @@
       ]
     },
     "Method": {
+      "description": "A gRPC method as part of a service.",
       "type": "object",
       "properties": {
         "description": {
+          "description": "Description of the method.",
           "type": "string"
         },
         "name": {
@@ -120,12 +130,15 @@
       ]
     },
     "Message": {
+      "description": "A Protobuf message, referenced by a method as parameter or nested within.",
       "type": "object",
       "properties": {
         "description": {
+          "description": "Description of the message.",
           "type": "string"
         },
         "proto": {
+          "description": "Raw Protobuf schema definition.",
           "type": "string"
         }
       },

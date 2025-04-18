@@ -42,10 +42,15 @@ impl Env {
     }
 }
 
+/// A Protobuf package which contains services and methods. Maybe originate from multiple schema
+/// files.
 #[derive(JsonSchema, Serialize)]
 pub struct Package {
+    /// Configuration of `protomd` and not part of the schema definition.
     config: config::Conf,
+    /// The package name.
     name: String,
+    /// List of services defined in the package.
     services: Vec<Service>,
 }
 
@@ -72,10 +77,14 @@ impl Package {
     }
 }
 
+/// A gRPC service as part of a package.
 #[derive(JsonSchema, Serialize)]
 struct Service {
+    /// Name of the gRPC service.
     name: String,
+    /// Description of the gRPC service.
     description: String,
+    /// List of methods the service provides.
     methods: Vec<Method>,
 }
 
@@ -105,10 +114,12 @@ impl Service {
     }
 }
 
+/// A gRPC method as part of a service.
 #[derive(JsonSchema, Serialize)]
 struct Method {
     /// Name of the method.
     name: String,
+    /// Description of the method.
     description: String,
     /// Input method parameter to the method call.
     input: IndexMap<String, Message>,
@@ -147,9 +158,12 @@ impl Method {
     }
 }
 
+/// A Protobuf message, referenced by a method as parameter or nested within.
 #[derive(JsonSchema, Serialize)]
 struct Message {
+    /// Description of the message.
     description: String,
+    /// Raw Protobuf schema definition.
     proto: String,
 }
 
