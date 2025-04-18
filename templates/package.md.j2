@@ -20,7 +20,7 @@
 
 ### Methods {{ "{#" ~ service.name|slugify ~ "-methods}" }}
 {% for method in service.methods %}
-- [{{ method.name }}](#{{ method.name|lower }})
+- [{{ method.name }}](#{{ service.name|slugify ~ "-" ~ method.name|lower }})
 
 {%- endfor %}
 {% for method in service.methods %}

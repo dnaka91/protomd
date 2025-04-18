@@ -6,7 +6,7 @@ The simplest server.
 
 ### Methods {#simpleservice-methods}
 
-- [Call](#call)
+- [Call](#simpleservice-call)
 
 ---
 
