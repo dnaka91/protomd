@@ -16,3 +16,26 @@
 #
 # Default value: []
 #disable = []
+
+# Symbols used to define the gRPC method type in templates.
+#
+# Note that these are always encapsulated in backticks to better highlight them in the
+# resulting Markdown, therefore HTML.
+[request_symbols]
+# Default value: "unary"
+#unary = "unary"
+
+# Client-side streaming.
+#
+# Default value: "client streaming"
+#client_streaming = "client streaming"
+
+# Server-side streaming.
+#
+# Default value: "server streaming"
+#server_streaming = "server streaming"
+
+# Bidirectional (both client- and server-side) streaming.
+#
+# Default value: "bidirectional streaming"
+#bidi_streaming = "bidirectional streaming"

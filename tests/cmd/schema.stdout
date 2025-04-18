@@ -37,11 +37,16 @@
         "markdownlint": {
           "description": "Configuration for `markdownlint`.",
           "$ref": "#/$defs/Markdownlint"
+        },
+        "request_symbols": {
+          "description": "Symbols used to define the gRPC method type in templates./n/n Note that these are always encapsulated in backticks to better highlight them in the/n resulting Markdown, therefore HTML.",
+          "$ref": "#/$defs/RequestSymbols"
         }
       },
       "required": [
         "frontmatter",
-        "markdownlint"
+        "markdownlint",
+        "request_symbols"
       ]
     },
     "Markdownlint": {
@@ -57,6 +62,33 @@
       },
       "required": [
         "disable"
+      ]
+    },
+    "RequestSymbols": {
+      "description": "Symbols, as in any kind of textual identifier, to describe the different kinds of gRPC calls.",
+      "type": "object",
+      "properties": {
+        "unary": {
+          "type": "string"
+        },
+        "client_streaming": {
+          "description": "Client-side streaming.",
+          "type": "string"
+        },
+        "server_streaming": {
+          "description": "Server-side streaming.",
+          "type": "string"
+        },
+        "bidi_streaming": {
+          "description": "Bidirectional (both client- and server-side) streaming.",
+          "type": "string",
+          "default": "bidirectional streaming"
+        }
+      },
+      "required": [
+        "unary",
+        "client_streaming",
+        "server_streaming"
       ]
     },
     "Service": {

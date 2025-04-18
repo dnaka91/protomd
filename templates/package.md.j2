@@ -29,13 +29,13 @@
 
 Request type: `
 {%- if method.client_streaming and method.server_streaming -%}
-bidirectional streaming
+{{ config.request_symbols.bidi_streaming }}
 {%- elif method.client_streaming -%}
-client streaming
+{{ config.request_symbols.client_streaming }}
 {%- elif method.server_streaming -%}
-server streaming
+{{ config.request_symbols.server_streaming }}
 {%- else -%}
-unary
+{{ config.request_symbols.unary }}
 {%- endif -%}
 `
 {% if method.description %}
