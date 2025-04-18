@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package markdown.sample;
+
+message Empty {}
+
+service OtherService {
+  rpc Other(Empty) returns (Empty);
+}

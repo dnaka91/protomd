@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package markdown.sample;
+
+// Message from `types.proto`.
+message Simple {
+  // A single integer.
+  uint32 value = 1;
+}

@@ -1,4 +1,6 @@
 #[test]
 fn cli_tests() {
-    trycmd::TestCases::new().case("tests/cmd/*.toml");
+    trycmd::TestCases::new()
+        .default_bin_name("protomd")
+        .case("tests/cmd/*.toml");
 }

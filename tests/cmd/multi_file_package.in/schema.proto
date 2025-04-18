@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package markdown.sample;
+
+import "types.proto";
+
+// The simplest server.
+service SimpleService {
+  // Call it!
+  rpc Call(Simple) returns (Simple);
+}

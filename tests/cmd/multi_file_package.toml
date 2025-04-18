@@ -1,0 +1,1 @@
+args = "-I . other.proto schema.proto types.proto"

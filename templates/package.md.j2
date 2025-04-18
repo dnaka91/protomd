@@ -12,12 +12,11 @@
 {% endif -%}
 
 # {{ name }}
-
-{% for service in services -%}
+{% for service in services %}
 ## {{ service.name }}
-
+{% if service.description %}
 {{ service.description }}
-
+{% endif %}
 ### Methods {{ "{#" ~ service.name|slugify ~ "-methods}" }}
 {% for method in service.methods %}
 - [{{ method.name }}](#{{ service.name|slugify ~ "-" ~ method.name|lower }})
@@ -39,21 +38,23 @@ server streaming
 unary
 {%- endif -%}
 `
-
+{% if method.description %}
 {{ method.description }}
-
+{% endif %}
 ##### Input {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "-input}" }}
-{% for _, message in method.input|items %}
+{% for _, message in method.input|items -%}
+{% if message.description %}
 {{ message.description }}
-
+{% endif %}
 ```proto
 {{ message.proto }}
 ```
 {% endfor %}
 ##### Output {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "-output}" }}
-{% for _, message in method.output|items %}
+{% for _, message in method.output|items -%}
+{% if message.description %}
 {{ message.description }}
-
+{% endif %}
 ```proto
 {{ message.proto }}
 ```

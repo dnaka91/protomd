@@ -107,11 +107,16 @@ impl Service {
 
 #[derive(JsonSchema, Serialize)]
 struct Method {
+    /// Name of the method.
     name: String,
     description: String,
+    /// Input method parameter to the method call.
     input: IndexMap<String, Message>,
+    /// Output message parameter to the method call.
     output: IndexMap<String, Message>,
+    /// Whether this method uses client-side streaming.
     client_streaming: bool,
+    /// Whether this method uses server-side streaming.
     server_streaming: bool,
 }
 

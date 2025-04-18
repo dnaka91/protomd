@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Package",
+  "type": "object",
+  "properties": {
+    "config": {
+      "$ref": "#/$defs/Conf"
+    },
+    "name": {
+      "type": "string"
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Service"
+      }
+    }
+  },
+  "required": [
+    "config",
+    "name",
+    "services"
+  ],
+  "$defs": {
+    "Conf": {
+      "description": "Configuration for the protomd Protobuf Markdown generator.",
+      "type": "object",
+      "properties": {
+        "frontmatter": {
+          "description": "Optional frontmatter to place at the beginning of each generated file./n/n For example, in Vitepress you can configure the outline level for the navigation sidebar by/n adding the following configuration as frontmatter:/n/n frontmatter = /"outline: [2, 4]/"",
+          "type": "string"
+        },
+        "markdownlint": {
+          "description": "Configuration for `markdownlint`.",
+          "$ref": "#/$defs/Markdownlint"
+        }
+      },
+      "required": [
+        "frontmatter",
+        "markdownlint"
+      ]
+    },
+    "Markdownlint": {
+      "type": "object",
+      "properties": {
+        "disable": {
+          "description": "List of rules to disable.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "disable"
+      ]
+    },
+    "Service": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Method"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "methods"
+      ]
+    },
+    "Method": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the method.",
+          "type": "string"
+        },
+        "input": {
+          "description": "Input method parameter to the method call.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "output": {
+          "description": "Output message parameter to the method call.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Message"
+          }
+        },
+        "client_streaming": {
+          "description": "Whether this method uses client-side streaming.",
+          "type": "boolean"
+        },
+        "server_streaming": {
+          "description": "Whether this method uses server-side streaming.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "input",
+        "output",
+        "client_streaming",
+        "server_streaming"
+      ]
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "proto": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "proto"
+      ]
+    }
+  }
+}
