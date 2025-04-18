@@ -39,6 +39,13 @@ pub struct Cli {
     #[arg(long)]
     pub init: bool,
 
+    /// Print the schema of the template context on STDOUT.
+    ///
+    /// This documents the structure of the data that is provided to the Jinja template when it is
+    /// rendered and can help when building a custom template to be used instead of the default.
+    #[arg(long)]
+    pub schema: bool,
+
     /// Input files or folders to generate the documentation from.
     ///
     /// In case of a file, it is only included if it has a `*.proto` extension. However, if pointed

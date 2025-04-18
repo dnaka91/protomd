@@ -21,6 +21,7 @@ use protox::{
     prost_reflect::FileDescriptor,
 };
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use schemars::schema_for;
 use walkdir::WalkDir;
 
 use self::{cli::Cli, resolver::CachingFileResolver, templates::Package};
@@ -34,6 +35,12 @@ fn main() -> Result<()> {
         }
 
         std::fs::write("protomd.toml", config::template())?;
+        return Ok(());
+    }
+
+    if cli.schema {
+        let schema = schema_for!(Package);
+        println!("{}", serde_json::to_string_pretty(&schema)?);
         return Ok(());
     }
 

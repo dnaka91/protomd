@@ -11,6 +11,7 @@ use protox::{
         ServiceDescriptor,
     },
 };
+use schemars::JsonSchema;
 use serde::Serialize;
 
 use crate::config;
@@ -41,7 +42,7 @@ impl Env {
     }
 }
 
-#[derive(Serialize)]
+#[derive(JsonSchema, Serialize)]
 pub struct Package {
     config: config::Conf,
     name: String,
@@ -71,7 +72,7 @@ impl Package {
     }
 }
 
-#[derive(Serialize)]
+#[derive(JsonSchema, Serialize)]
 struct Service {
     name: String,
     description: String,
@@ -104,7 +105,7 @@ impl Service {
     }
 }
 
-#[derive(Serialize)]
+#[derive(JsonSchema, Serialize)]
 struct Method {
     name: String,
     description: String,
@@ -141,7 +142,7 @@ impl Method {
     }
 }
 
-#[derive(Serialize)]
+#[derive(JsonSchema, Serialize)]
 struct Message {
     description: String,
     proto: String,

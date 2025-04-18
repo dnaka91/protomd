@@ -1,9 +1,10 @@
 use anyhow::Result;
 use confique::{Config, toml::FormatOptions};
+use schemars::JsonSchema;
 use serde::Serialize;
 
 /// Configuration for the protomd Protobuf Markdown generator.
-#[derive(Clone, confique::Config, Serialize)]
+#[derive(Clone, confique::Config, JsonSchema, Serialize)]
 pub struct Conf {
     /// Optional frontmatter to place at the beginning of each generated file.
     ///
@@ -13,12 +14,12 @@ pub struct Conf {
     /// frontmatter = "outline: [2, 4]"
     #[config(default = "")]
     pub frontmatter: String,
-    /// Configuration for `markdowlint`.
+    /// Configuration for `markdownlint`.
     #[config(nested)]
     pub markdownlint: Markdownlint,
 }
 
-#[derive(Clone, confique::Config, Serialize)]
+#[derive(Clone, confique::Config, JsonSchema, Serialize)]
 pub struct Markdownlint {
     /// List of rules to disable.
     #[config(default = [])]
