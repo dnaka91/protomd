@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Package",
-  "description": "A Protobuf package which contains services and methods. Maybe originate from multiple schema/n files.",
+  "description": "A Protobuf package which contains services and methods. Maybe originate from multiple schema/nfiles.",
   "type": "object",
   "properties": {
     "config": {
@@ -31,7 +31,7 @@
       "type": "object",
       "properties": {
         "frontmatter": {
-          "description": "Optional frontmatter to place at the beginning of each generated file./n/n For example, in Vitepress you can configure the outline level for the navigation sidebar by/n adding the following configuration as frontmatter:/n/n frontmatter = /"outline: [2, 4]/"",
+          "description": "Optional frontmatter to place at the beginning of each generated file./n/nFor example, in Vitepress you can configure the outline level for the navigation sidebar by/nadding the following configuration as frontmatter:/n/nfrontmatter = /"outline: [2, 4]/"",
           "type": "string"
         },
         "markdownlint": {
@@ -39,7 +39,7 @@
           "$ref": "#/$defs/Markdownlint"
         },
         "request_symbols": {
-          "description": "Symbols used to define the gRPC method type in templates./n/n Note that these are always encapsulated in backticks to better highlight them in the/n resulting Markdown, therefore HTML.",
+          "description": "Symbols used to define the gRPC method type in templates./n/nNote that these are always encapsulated in backticks to better highlight them in the/nresulting Markdown, therefore HTML.",
           "$ref": "#/$defs/RequestSymbols"
         }
       },
@@ -81,14 +81,14 @@
         },
         "bidi_streaming": {
           "description": "Bidirectional (both client- and server-side) streaming.",
-          "type": "string",
-          "default": "bidirectional streaming"
+          "type": "string"
         }
       },
       "required": [
         "unary",
         "client_streaming",
-        "server_streaming"
+        "server_streaming",
+        "bidi_streaming"
       ]
     },
     "Service": {
