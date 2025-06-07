@@ -1,0 +1,17 @@
+.ie /n(.g .ds Aq /(aq
+.el .ds Aq '
+.TH protomd-init 1  "init " 
+.SH NAME
+protomd/-init /- Initialize a new configuration file under the current working directory
+.SH SYNOPSIS
+/fBprotomd init/fR [/fB/-h/fR|/fB/-/-help/fR] 
+.SH DESCRIPTION
+Initialize a new configuration file under the current working directory.
+.PP
+If the file already exists, it will not be overwritten but an error be printed out instead. To overwrite an existing configuration, delete it first and then run the command again.
+.PP
+Using this flag will ignore all other arguments, only generate the initial configuration file and then exit.
+.SH OPTIONS
+.TP
+/fB/-h/fR, /fB/-/-help/fR
+Print help (see a summary with /*(Aq/-h/*(Aq)

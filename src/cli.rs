@@ -1,6 +1,11 @@
-use std::path::PathBuf;
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
+};
 
-use clap::{Parser, ValueHint};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
+use clap_complete::Shell;
+use clap_complete_nushell::Nushell;
 
 /// Markdow generator for Protobuf schema files.
 #[derive(Parser)]
@@ -29,28 +34,14 @@ pub struct Cli {
     #[arg(long)]
     pub clean: bool,
 
-    /// Initialize a new configuration file under the current working directory.
-    ///
-    /// If the file already exists, it will not be overwritten but an error be printed out instead.
-    /// To overwrite an existing configuration, delete it first and then run the command again.
-    ///
-    /// Using this flag will ignore all other arguments, only generate the initial configuration
-    /// file and then exit.
-    #[arg(long)]
-    pub init: bool,
-
-    /// Print the schema of the template context on STDOUT.
-    ///
-    /// This documents the structure of the data that is provided to the Jinja template when it is
-    /// rendered and can help when building a custom template to be used instead of the default.
-    #[arg(long)]
-    pub schema: bool,
-
     /// Input files or folders to generate the documentation from.
     ///
     /// In case of a file, it is only included if it has a `*.proto` extension. However, if pointed
     /// to a directory, it will be searched recursively for `*.proto` files.
     pub input: Vec<PathBuf>,
+
+    #[command(subcommand)]
+    pub cmd: Option<Command>,
 }
 
 impl Cli {
@@ -58,6 +49,69 @@ impl Cli {
     pub fn parse() -> Self {
         <Self as Parser>::parse()
     }
+}
+
+#[derive(Subcommand)]
+pub enum Command {
+    /// Initialize a new configuration file under the current working directory.
+    ///
+    /// If the file already exists, it will not be overwritten but an error be printed out instead.
+    /// To overwrite an existing configuration, delete it first and then run the command again.
+    ///
+    /// Using this flag will ignore all other arguments, only generate the initial configuration
+    /// file and then exit.
+    Init,
+
+    /// Print the schema of the template context on STDOUT.
+    ///
+    /// This documents the structure of the data that is provided to the Jinja template when it is
+    /// rendered and can help when building a custom template to be used instead of the default.
+    Schema,
+
+    /// Create shell completion scripts for all supported shells.
+    ///
+    /// The completions will be written in the given directory, with an appropriate naming for each
+    /// shell type. For example, *.bash, *.elv, *.fish, ...
+    Completion {
+        /// Directory to place create the files in. If the directory doesn't exist already, it'll be
+        /// created.
+        ///
+        /// Note that any existing file will be overwritten without further confirmation or warning.
+        #[arg(value_hint = ValueHint::DirPath)]
+        dir: PathBuf,
+    },
+
+    /// Create `man` page files with documentation about all options and subcommands.
+    Manpages {
+        /// Directory to place create the files in. If the directory doesn't exist already, it'll be
+        /// created.
+        ///
+        /// Note that any existing file will be overwritten without further confirmation or warning.
+        #[arg(value_hint = ValueHint::DirPath)]
+        dir: PathBuf,
+    },
+}
+
+pub fn completion(dir: &Path) -> io::Result<()> {
+    fs::create_dir_all(dir).ok();
+
+    let mut cmd = Cli::command();
+    let bin_name = cmd.get_bin_name().unwrap_or(cmd.get_name()).to_owned();
+
+    for &shell in Shell::value_variants() {
+        clap_complete::generate_to(shell, &mut cmd, &bin_name, dir)?;
+    }
+
+    clap_complete::generate_to(Nushell, &mut cmd, &bin_name, dir)?;
+
+    Ok(())
+}
+
+pub fn manpages(dir: &Path) -> io::Result<()> {
+    fs::create_dir_all(dir).ok();
+
+    let cmd = Cli::command();
+    clap_mangen::generate_to(cmd, dir)
 }
 
 #[cfg(test)]

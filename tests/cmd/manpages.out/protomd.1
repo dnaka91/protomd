@@ -1,0 +1,48 @@
+.ie /n(.g .ds Aq /(aq
+.el .ds Aq '
+.TH protomd 1  "protomd " 
+.SH NAME
+protomd /- Markdow generator for Protobuf schema files
+.SH SYNOPSIS
+/fBprotomd/fR [/fB/-I/fR|/fB/-/-include/fR] [/fB/-o/fR|/fB/-/-output/-dir/fR] [/fB/-/-clean/fR] [/fB/-h/fR|/fB/-/-help/fR] [/fIINPUT/fR] [/fIsubcommands/fR]
+.SH DESCRIPTION
+Markdow generator for Protobuf schema files
+.SH OPTIONS
+.TP
+/fB/-I/fR, /fB/-/-include/fR=/fIINCLUDE/fR
+Directories that will be searched for referenced schema files.
+
+Input files can reference other schemas that might not be part of the total list of input files. Each include path given will be tried when locating the include files.
+.TP
+/fB/-o/fR, /fB/-/-output/-dir/fR=/fIOUTPUT_DIR/fR [default: .]
+Directory to write the generated files into.
+
+If the directory doesn/*(Aqt exist, it will be created automatically.
+
+Any existing files will be overwritten without warning. Therefore, be careful if pointing to a directory that already includes other files. Files that don/*(Aqt have any overlapping name remain untouched.
+
+Use the `/-/-clean` flag to wipe the output directory before generating the new files.
+.TP
+/fB/-/-clean/fR
+Remove any content from the output directory before writing any files to it. This is not done when the output directory points to the current directory
+.TP
+/fB/-h/fR, /fB/-/-help/fR
+Print help (see a summary with /*(Aq/-h/*(Aq)
+.TP
+[/fIINPUT/fR]
+Input files or folders to generate the documentation from.
+
+In case of a file, it is only included if it has a `*.proto` extension. However, if pointed to a directory, it will be searched recursively for `*.proto` files.
+.SH SUBCOMMANDS
+.TP
+protomd/-init(1)
+Initialize a new configuration file under the current working directory
+.TP
+protomd/-schema(1)
+Print the schema of the template context on STDOUT
+.TP
+protomd/-completion(1)
+Create shell completion scripts for all supported shells
+.TP
+protomd/-manpages(1)
+Create `man` page files with documentation about all options and subcommands

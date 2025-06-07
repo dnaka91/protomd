@@ -1,0 +1,174 @@
+#compdef protomd
+
+autoload -U is-at-least
+
+_protomd() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : /
+'*-I+[Directories that will be searched for referenced schema files]:INCLUDE:_files -/' /
+'*--include=[Directories that will be searched for referenced schema files]:INCLUDE:_files -/' /
+'-o+[Directory to write the generated files into]:OUTPUT_DIR:_files -/' /
+'--output-dir=[Directory to write the generated files into]:OUTPUT_DIR:_files -/' /
+'--clean[Remove any content from the output directory before writing any files to it. This is not done when the output directory points to the current directory]' /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+'::input -- Input files or folders to generate the documentation from:_files' /
+":: :_protomd_commands" /
+"*::: :->protomd" /
+&& ret=0
+    case $state in
+    (protomd)
+        words=($line[2] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:protomd-command-$line[2]:"
+        case $line[2] in
+            (init)
+_arguments "${_arguments_options[@]}" : /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+&& ret=0
+;;
+(schema)
+_arguments "${_arguments_options[@]}" : /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+&& ret=0
+;;
+(completion)
+_arguments "${_arguments_options[@]}" : /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+':dir -- Directory to place create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
+&& ret=0
+;;
+(manpages)
+_arguments "${_arguments_options[@]}" : /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+':dir -- Directory to place create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : /
+":: :_protomd__help_commands" /
+"*::: :->help" /
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:protomd-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+(schema)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+(completion)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+(manpages)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_protomd_commands] )) ||
+_protomd_commands() {
+    local commands; commands=(
+'init:Initialize a new configuration file under the current working directory' /
+'schema:Print the schema of the template context on STDOUT' /
+'completion:Create shell completion scripts for all supported shells' /
+'manpages:Create /`man/` page files with documentation about all options and subcommands' /
+'help:Print this message or the help of the given subcommand(s)' /
+    )
+    _describe -t commands 'protomd commands' commands "$@"
+}
+(( $+functions[_protomd__completion_commands] )) ||
+_protomd__completion_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd completion commands' commands "$@"
+}
+(( $+functions[_protomd__help_commands] )) ||
+_protomd__help_commands() {
+    local commands; commands=(
+'init:Initialize a new configuration file under the current working directory' /
+'schema:Print the schema of the template context on STDOUT' /
+'completion:Create shell completion scripts for all supported shells' /
+'manpages:Create /`man/` page files with documentation about all options and subcommands' /
+'help:Print this message or the help of the given subcommand(s)' /
+    )
+    _describe -t commands 'protomd help commands' commands "$@"
+}
+(( $+functions[_protomd__help__completion_commands] )) ||
+_protomd__help__completion_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help completion commands' commands "$@"
+}
+(( $+functions[_protomd__help__help_commands] )) ||
+_protomd__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help help commands' commands "$@"
+}
+(( $+functions[_protomd__help__init_commands] )) ||
+_protomd__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help init commands' commands "$@"
+}
+(( $+functions[_protomd__help__manpages_commands] )) ||
+_protomd__help__manpages_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help manpages commands' commands "$@"
+}
+(( $+functions[_protomd__help__schema_commands] )) ||
+_protomd__help__schema_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help schema commands' commands "$@"
+}
+(( $+functions[_protomd__init_commands] )) ||
+_protomd__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd init commands' commands "$@"
+}
+(( $+functions[_protomd__manpages_commands] )) ||
+_protomd__manpages_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd manpages commands' commands "$@"
+}
+(( $+functions[_protomd__schema_commands] )) ||
+_protomd__schema_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd schema commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_protomd" ]; then
+    _protomd "$@"
+else
+    compdef _protomd protomd
+fi

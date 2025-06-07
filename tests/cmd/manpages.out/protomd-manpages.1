@@ -1,0 +1,18 @@
+.ie /n(.g .ds Aq /(aq
+.el .ds Aq '
+.TH protomd-manpages 1  "manpages " 
+.SH NAME
+protomd/-manpages /- Create `man` page files with documentation about all options and subcommands
+.SH SYNOPSIS
+/fBprotomd manpages/fR [/fB/-h/fR|/fB/-/-help/fR] </fIDIR/fR> 
+.SH DESCRIPTION
+Create `man` page files with documentation about all options and subcommands
+.SH OPTIONS
+.TP
+/fB/-h/fR, /fB/-/-help/fR
+Print help (see a summary with /*(Aq/-h/*(Aq)
+.TP
+</fIDIR/fR>
+Directory to place create the files in. If the directory doesn/*(Aqt exist already, it/*(Aqll be created.
+
+Note that any existing file will be overwritten without further confirmation or warning.

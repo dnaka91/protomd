@@ -1,2 +1,2 @@
-args = "--init"
+args = "init"
 status = "failed"

@@ -24,23 +24,23 @@ use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use schemars::schema_for;
 use walkdir::WalkDir;
 
-use self::{cli::Cli, resolver::CachingFileResolver, templates::Package};
+use self::{
+    cli::{Cli, Command},
+    resolver::CachingFileResolver,
+    templates::Package,
+};
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    if cli.init {
-        if std::fs::exists("protomd.toml")? {
-            bail!("A configuration file `protomd.toml` already exists");
+    if let Some(cmd) = cli.cmd {
+        match cmd {
+            Command::Init => init()?,
+            Command::Schema => schema()?,
+            Command::Completion { dir } => cli::completion(&dir)?,
+            Command::Manpages { dir } => cli::manpages(&dir)?,
         }
 
-        std::fs::write("protomd.toml", config::template())?;
-        return Ok(());
-    }
-
-    if cli.schema {
-        let schema = schema_for!(Package);
-        println!("{}", serde_json::to_string_pretty(&schema)?);
         return Ok(());
     }
 
@@ -160,4 +160,19 @@ fn clean_output(path: &Path) -> Result<()> {
 
 fn should_generate(metadata: &HashMap<&str, &FileMetadata>, file: &FileDescriptor) -> bool {
     metadata.get(file.name()).is_some_and(|m| !m.is_import()) && file.services().count() > 0
+}
+
+fn init() -> Result<()> {
+    if std::fs::exists("protomd.toml")? {
+        bail!("A configuration file `protomd.toml` already exists");
+    }
+
+    std::fs::write("protomd.toml", config::template())?;
+    Ok(())
+}
+
+fn schema() -> Result<()> {
+    let schema = schema_for!(Package);
+    println!("{}", serde_json::to_string_pretty(&schema)?);
+    Ok(())
 }

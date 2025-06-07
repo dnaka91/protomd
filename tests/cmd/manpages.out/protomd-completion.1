@@ -1,0 +1,20 @@
+.ie /n(.g .ds Aq /(aq
+.el .ds Aq '
+.TH protomd-completion 1  "completion " 
+.SH NAME
+protomd/-completion /- Create shell completion scripts for all supported shells
+.SH SYNOPSIS
+/fBprotomd completion/fR [/fB/-h/fR|/fB/-/-help/fR] </fIDIR/fR> 
+.SH DESCRIPTION
+Create shell completion scripts for all supported shells.
+.PP
+The completions will be written in the given directory, with an appropriate naming for each shell type. For example, *.bash, *.elv, *.fish, ...
+.SH OPTIONS
+.TP
+/fB/-h/fR, /fB/-/-help/fR
+Print help (see a summary with /*(Aq/-h/*(Aq)
+.TP
+</fIDIR/fR>
+Directory to place create the files in. If the directory doesn/*(Aqt exist already, it/*(Aqll be created.
+
+Note that any existing file will be overwritten without further confirmation or warning.
