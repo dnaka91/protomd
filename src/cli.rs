@@ -73,20 +73,22 @@ pub enum Command {
     /// The completions will be written in the given directory, with an appropriate naming for each
     /// shell type. For example, *.bash, *.elv, *.fish, ...
     Completion {
-        /// Directory to place create the files in. If the directory doesn't exist already, it'll be
-        /// created.
+        /// Directory to place create the files in. If the directory doesn't exist already, it'll
+        /// be created.
         ///
-        /// Note that any existing file will be overwritten without further confirmation or warning.
+        /// Note that any existing file will be overwritten without further confirmation or
+        /// warning.
         #[arg(value_hint = ValueHint::DirPath)]
         dir: PathBuf,
     },
 
     /// Create `man` page files with documentation about all options and subcommands.
     Manpages {
-        /// Directory to place create the files in. If the directory doesn't exist already, it'll be
-        /// created.
+        /// Directory to place create the files in. If the directory doesn't exist already, it'll
+        /// be created.
         ///
-        /// Note that any existing file will be overwritten without further confirmation or warning.
+        /// Note that any existing file will be overwritten without further confirmation or
+        /// warning.
         #[arg(value_hint = ValueHint::DirPath)]
         dir: PathBuf,
     },

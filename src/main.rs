@@ -26,6 +26,7 @@ use walkdir::WalkDir;
 
 use self::{
     cli::{Cli, Command},
+    config::Conf,
     resolver::CachingFileResolver,
     templates::Package,
 };
@@ -46,8 +47,15 @@ fn main() -> Result<()> {
 
     let config = config::load()?;
 
-    let resolver = build_resolver(cli.include);
-    let files = search_inputs(cli.input)?;
+    let packages = collect(cli.include, cli.input, &config)?;
+    render(cli.clean, &cli.output_dir, packages)?;
+
+    Ok(())
+}
+
+fn collect(include: Vec<PathBuf>, input: Vec<PathBuf>, config: &Conf) -> Result<Vec<Package>> {
+    let resolver = build_resolver(include);
+    let files = search_inputs(input)?;
 
     let compiler = {
         let mut c = Compiler::with_file_resolver(resolver.clone());
@@ -73,17 +81,21 @@ fn main() -> Result<()> {
         .map(|(name, files)| Package::new(config.clone(), &resolver, name, &files))
         .collect::<Result<Vec<_>, _>>()?;
 
-    if cli.clean {
-        clean_output(&cli.output_dir)?;
+    Ok(templates)
+}
+
+fn render(clean: bool, output_dir: &Path, templates: Vec<Package>) -> Result<()> {
+    if clean {
+        clean_output(output_dir)?;
     }
 
-    fs::create_dir_all(&cli.output_dir).ok();
+    fs::create_dir_all(output_dir).ok();
 
     let env = templates::Env::new()?;
 
     templates.into_par_iter().try_for_each(|template| {
         let output_name = template.file_name();
-        let file = File::create(cli.output_dir.join(output_name))?;
+        let file = File::create(output_dir.join(output_name))?;
         let mut file = BufWriter::with_capacity(256 * 1024, file);
 
         env.render(template, &mut file)?;
