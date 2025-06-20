@@ -44,6 +44,17 @@ def "main publish" [tag: string] {
 }
 
 def build-assets [tag: string]: nothing -> list<path> {
+  $env.RUSTFLAGS = (
+    [
+      $"(cargo metadata --format-version 1 | from json | get workspace_root)=src"
+      $"($env.CARGO_HOME? | (default $nu.home-path | path join .cargo))=cargo"
+      $"($env.RUSTUP_HOME? | (default $nu.home-path | path join .rustup))=rust"
+    ]
+    | each {["--remap-path-prefix" $in]}
+    | flatten
+    | str join ' '
+  )
+
   [aarch64 x86_64]
   | each { |arch| [
       $"($arch)-unknown-linux-musl"
@@ -59,7 +70,8 @@ def build-asset [tag: string]: string -> list<path> {
   let target = $in
   let dir = "dist"
   let base_name = $"protomd-($tag)-($target)"
-  let tar_file  = $"($base_name).tar.zst"
+  let tar_file  = $"($base_name).tar"
+  let zst_file  = $"($tar_file).zst"
   let chk_file = $"($base_name).sha512"
 
   print $"(ansi gb)==>(ansi w) building target (ansi bb)($target)(ansi reset)"
@@ -76,9 +88,10 @@ def build-asset [tag: string]: string -> list<path> {
   )
 
   cd $dir
-  sha512sum $tar_file | save -f $chk_file
+  zstdmt --rm --force $tar_file -o $zst_file
+  sha512sum $zst_file | save -f $chk_file
 
-  [$tar_file $chk_file] | each {|f| $dir | path join $f }
+  [$zst_file $chk_file] | each {|f| $dir | path join $f }
 }
 
 def create-tag [ tag:string]: nothing -> nothing {
