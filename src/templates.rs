@@ -86,6 +86,10 @@ struct Service {
     description: String,
     /// List of methods the service provides.
     methods: Vec<Method>,
+    /// Whether this service is marked deprecated.
+    deprecated: bool,
+    /// Whether the file this service is defined in is marked deprecated.
+    file_deprecated: bool,
 }
 
 impl Service {
@@ -103,6 +107,20 @@ impl Service {
             .map(|l| unindent::unindent(l.leading_comments().trim()))
             .unwrap_or_default();
 
+        let deprecated = value
+            .service_descriptor_proto()
+            .options
+            .as_ref()
+            .and_then(|o| o.deprecated)
+            .unwrap_or(false);
+
+        let file_deprecated = value
+            .parent_file_descriptor_proto()
+            .options
+            .as_ref()
+            .and_then(|o| o.deprecated)
+            .unwrap_or(false);
+
         Ok(Self {
             name: value.name().to_owned(),
             description,
@@ -110,6 +128,8 @@ impl Service {
                 .methods()
                 .map(|v| Method::new(resolver, &v))
                 .collect::<Result<_>>()?,
+            deprecated,
+            file_deprecated,
         })
     }
 }
@@ -129,6 +149,8 @@ struct Method {
     client_streaming: bool,
     /// Whether this method uses server-side streaming.
     server_streaming: bool,
+    /// Whether this method is marked deprecated.
+    deprecated: bool,
 }
 
 impl Method {
@@ -147,6 +169,13 @@ impl Method {
             .map(|l| unindent::unindent(l.leading_comments().trim()))
             .unwrap_or_default();
 
+        let deprecated = value
+            .method_descriptor_proto()
+            .options
+            .as_ref()
+            .and_then(|o| o.deprecated)
+            .unwrap_or(false);
+
         Ok(Self {
             name: value.name().to_owned(),
             description,
@@ -154,6 +183,7 @@ impl Method {
             output: find_messages(resolver, value.output())?,
             client_streaming: value.is_client_streaming(),
             server_streaming: value.is_server_streaming(),
+            deprecated,
         })
     }
 }
@@ -165,6 +195,8 @@ struct Message {
     description: String,
     /// Raw Protobuf schema definition.
     proto: String,
+    /// Whether this message is marked deprecated.
+    deprecated: bool,
 }
 
 impl Message {
@@ -204,8 +236,13 @@ impl Message {
             })
             .unwrap_or_default();
         let proto = unindent::unindent(&proto);
+        let deprecated = value.deprecated();
 
-        Ok(Self { description, proto })
+        Ok(Self {
+            description,
+            proto,
+            deprecated,
+        })
     }
 }
 
@@ -258,12 +295,19 @@ fn collect_deps(
     Ok(())
 }
 
+/// Combined logic for messages and enum, as most of the accessors and logic is the same regadless.
+///
+/// This allows to have much less match statements in the code that uses it as we can glue over all
+/// the minor details inside of this type.
 enum CombinedDescriptor {
+    /// Protobuf message.
     Message(MessageDescriptor),
+    /// Protobuf enum.
     Enum(EnumDescriptor),
 }
 
 impl CombinedDescriptor {
+    /// Get the parent file this message/enum is defined in.
     fn parent_file(&self) -> FileDescriptor {
         match self {
             Self::Message(d) => d.parent_file(),
@@ -271,6 +315,7 @@ impl CombinedDescriptor {
         }
     }
 
+    /// Get the full name of this message/enum, which is the package name plus its own name.
     fn full_name(&self) -> &str {
         match self {
             Self::Message(d) => d.full_name(),
@@ -278,6 +323,7 @@ impl CombinedDescriptor {
         }
     }
 
+    /// Get the path to locate the descriptor's source code.
     fn path(&self) -> &[i32] {
         match self {
             Self::Message(d) => d.path(),
@@ -285,6 +331,7 @@ impl CombinedDescriptor {
         }
     }
 
+    /// Whether this is an auto-generated descriptor for map entries.
     fn is_map_entry(&self) -> bool {
         match self {
             Self::Message(d) => d.is_map_entry(),
@@ -292,6 +339,7 @@ impl CombinedDescriptor {
         }
     }
 
+    /// Iterate over al the fields in the descriptor.
     fn fields(&self) -> Box<dyn ExactSizeIterator<Item = FieldDescriptor> + '_> {
         match self {
             Self::Message(d) => Box::new(d.fields()),
@@ -299,6 +347,7 @@ impl CombinedDescriptor {
         }
     }
 
+    /// Whether this message/enum is included in the given other descriptor.
     fn included_in(&self, other: &CombinedDescriptor) -> bool {
         let parent = match self {
             Self::Message(d) => d.parent_message(),
@@ -311,6 +360,24 @@ impl CombinedDescriptor {
         };
 
         parent.as_ref() == other
+    }
+
+    /// Whether this message/enum is marked as deprecated.
+    fn deprecated(&self) -> bool {
+        match self {
+            CombinedDescriptor::Message(d) => d
+                .descriptor_proto()
+                .options
+                .as_ref()
+                .and_then(|o| o.deprecated)
+                .unwrap_or(false),
+            CombinedDescriptor::Enum(d) => d
+                .enum_descriptor_proto()
+                .options
+                .as_ref()
+                .and_then(|o| o.deprecated)
+                .unwrap_or(false),
+        }
     }
 }
 

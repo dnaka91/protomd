@@ -109,12 +109,22 @@
           "items": {
             "$ref": "#/$defs/Method"
           }
+        },
+        "deprecated": {
+          "description": "Whether this service is marked deprecated.",
+          "type": "boolean"
+        },
+        "file_deprecated": {
+          "description": "Whether the file this service is defined in is marked deprecated.",
+          "type": "boolean"
         }
       },
       "required": [
         "name",
         "description",
-        "methods"
+        "methods",
+        "deprecated",
+        "file_deprecated"
       ]
     },
     "Method": {
@@ -150,6 +160,10 @@
         "server_streaming": {
           "description": "Whether this method uses server-side streaming.",
           "type": "boolean"
+        },
+        "deprecated": {
+          "description": "Whether this method is marked deprecated.",
+          "type": "boolean"
         }
       },
       "required": [
@@ -158,7 +172,8 @@
         "input",
         "output",
         "client_streaming",
-        "server_streaming"
+        "server_streaming",
+        "deprecated"
       ]
     },
     "Message": {
@@ -172,11 +187,16 @@
         "proto": {
           "description": "Raw Protobuf schema definition.",
           "type": "string"
+        },
+        "deprecated": {
+          "description": "Whether this message is marked deprecated.",
+          "type": "boolean"
         }
       },
       "required": [
         "description",
-        "proto"
+        "proto",
+        "deprecated"
       ]
     }
   }

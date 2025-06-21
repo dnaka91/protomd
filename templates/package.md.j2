@@ -17,6 +17,12 @@
 {% if service.description %}
 {{ service.description }}
 {% endif %}
+{%- if service.deprecated %}
+**This service is deprecated**
+{% endif %}
+{%- if service.file_deprecated %}
+**The definition file of this service is deprecated**
+{% endif %}
 ### Methods {{ "{#" ~ service.name|slugify ~ "-methods}" }}
 {% for method in service.methods %}
 - [{{ method.name }}](#{{ service.name|slugify ~ "-" ~ method.name|lower }})
@@ -26,7 +32,9 @@
 ---
 
 #### {{ method.name }} {{ "{#" ~ service.name|slugify ~ "-" ~ method.name|slugify ~ "}" }}
-
+{% if method.deprecated %}
+**This method is deprecated**
+{% endif %}
 Request type: `
 {%- if method.client_streaming and method.server_streaming -%}
 {{ config.request_symbols.bidi_streaming }}
@@ -46,6 +54,9 @@ Request type: `
 {% if message.description %}
 {{ message.description }}
 {% endif %}
+{%- if message.deprecated %}
+**This message is deprecated**
+{% endif %}
 ```proto
 {{ message.proto }}
 ```
@@ -54,6 +65,9 @@ Request type: `
 {% for _, message in method.output|items -%}
 {% if message.description %}
 {{ message.description }}
+{% endif %}
+{%- if message.deprecated %}
+**This message is deprecated**
 {% endif %}
 ```proto
 {{ message.proto }}

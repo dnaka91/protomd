@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package markdown.sample;
+
+option deprecated = true;
+
+// This is a simple message.
+message Simple {
+  option deprecated = true;
+  // A single integer.
+  uint32 value = 1 [deprecated = true];
+  Other other = 2;
+}
+
+// Message referenced in `Simple`.
+message Other {
+  option deprecated = true;
+}
+
+// The simplest server.
+service SimpleService {
+  option deprecated = true;
+  // Call it!
+  rpc Call(Simple) returns (Simple) {
+    option deprecated = true;
+  }
+}
