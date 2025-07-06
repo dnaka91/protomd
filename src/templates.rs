@@ -47,7 +47,7 @@ impl Env {
 #[derive(JsonSchema, Serialize)]
 pub struct Package {
     /// Configuration of `protomd` and not part of the schema definition.
-    config: config::Conf,
+    config: config::Config,
     /// The package name.
     name: String,
     /// List of services defined in the package.
@@ -56,7 +56,7 @@ pub struct Package {
 
 impl Package {
     pub fn new(
-        config: config::Conf,
+        config: config::Config,
         resolver: &impl FileResolver,
         name: String,
         value: &[FileDescriptor],

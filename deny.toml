@@ -11,3 +11,6 @@ ignore = true
 
 [bans]
 skip = []
+skip-tree = [
+    { crate = "windows-sys@0.59", depth = 3 },
+]

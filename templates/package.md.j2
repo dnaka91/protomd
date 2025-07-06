@@ -37,13 +37,13 @@
 {% endif %}
 Request type: `
 {%- if method.client_streaming and method.server_streaming -%}
-{{ config.request_symbols.bidi_streaming }}
+{{ config.request_symbols.bidi_streaming|default("bidirectional streaing") }}
 {%- elif method.client_streaming -%}
-{{ config.request_symbols.client_streaming }}
+{{ config.request_symbols.client_streaming|default("client streaming") }}
 {%- elif method.server_streaming -%}
-{{ config.request_symbols.server_streaming }}
+{{ config.request_symbols.server_streaming|default("server streaming") }}
 {%- else -%}
-{{ config.request_symbols.unary }}
+{{ config.request_symbols.unary|default("unary") }}
 {%- endif -%}
 `
 {% if method.description %}

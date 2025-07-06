@@ -26,7 +26,7 @@ use walkdir::WalkDir;
 
 use self::{
     cli::{Cli, Command},
-    config::Conf,
+    config::Config,
     resolver::CachingFileResolver,
     templates::Package,
 };
@@ -53,7 +53,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn collect(include: Vec<PathBuf>, input: Vec<PathBuf>, config: &Conf) -> Result<Vec<Package>> {
+fn collect(include: Vec<PathBuf>, input: Vec<PathBuf>, config: &Config) -> Result<Vec<Package>> {
     let resolver = build_resolver(include);
     let files = search_inputs(input)?;
 

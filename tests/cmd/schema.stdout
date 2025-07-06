@@ -6,7 +6,7 @@
   "properties": {
     "config": {
       "description": "Configuration of `protomd` and not part of the schema definition.",
-      "$ref": "#/$defs/Conf"
+      "$ref": "#/$defs/Config"
     },
     "name": {
       "description": "The package name.",
@@ -26,30 +26,31 @@
     "services"
   ],
   "$defs": {
-    "Conf": {
+    "Config": {
       "description": "Configuration for the protomd Protobuf Markdown generator.",
       "type": "object",
       "properties": {
         "frontmatter": {
           "description": "Optional frontmatter to place at the beginning of each generated file./n/nFor example, in Vitepress you can configure the outline level for the navigation sidebar by/nadding the following configuration as frontmatter:/n/nfrontmatter = /"outline: [2, 4]/"",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         "markdownlint": {
           "description": "Configuration for `markdownlint`.",
-          "$ref": "#/$defs/Markdownlint"
+          "$ref": "#/$defs/Markdownlint",
+          "default": {
+            "disable": []
+          }
         },
         "request_symbols": {
-          "description": "Symbols used to define the gRPC method type in templates./n/nNote that these are always encapsulated in backticks to better highlight them in the/nresulting Markdown, therefore HTML.",
-          "$ref": "#/$defs/RequestSymbols"
+          "description": "Symbols used to define the gRPC method type in templates.",
+          "$ref": "#/$defs/RequestSymbols",
+          "default": {}
         }
-      },
-      "required": [
-        "frontmatter",
-        "markdownlint",
-        "request_symbols"
-      ]
+      }
     },
     "Markdownlint": {
+      "description": "Configuration for `markdownlint`.",
       "type": "object",
       "properties": {
         "disable": {
@@ -57,50 +58,55 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "default": []
         }
-      },
-      "required": [
-        "disable"
-      ]
+      }
     },
     "RequestSymbols": {
-      "description": "Symbols, as in any kind of textual identifier, to describe the different kinds of gRPC calls.",
+      "description": "Symbols used to define the gRPC method type in templates./n/nNote that these are always encapsulated in backticks to better highlight them in the/nresulting Markdown, therefore HTML.",
       "type": "object",
       "properties": {
         "unary": {
-          "type": "string"
+          "description": "Single request-response oneshot.",
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "client_streaming": {
           "description": "Client-side streaming.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "server_streaming": {
           "description": "Server-side streaming.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "bidi_streaming": {
           "description": "Bidirectional (both client- and server-side) streaming.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         }
-      },
-      "required": [
-        "unary",
-        "client_streaming",
-        "server_streaming",
-        "bidi_streaming"
-      ]
+      }
     },
     "Service": {
       "description": "A gRPC service as part of a package.",
       "type": "object",
       "properties": {
-        "description": {
-          "description": "Description of the gRPC service.",
-          "type": "string"
-        },
         "name": {
           "description": "Name of the gRPC service.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the gRPC service.",
           "type": "string"
         },
         "methods": {
@@ -131,12 +137,12 @@
       "description": "A gRPC method as part of a service.",
       "type": "object",
       "properties": {
-        "description": {
-          "description": "Description of the method.",
-          "type": "string"
-        },
         "name": {
           "description": "Name of the method.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the method.",
           "type": "string"
         },
         "input": {
