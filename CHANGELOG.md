@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [0.2.0] - 2025-07-06
+
+### 🚀 Features
+
+- Collect and report deprecation of schema elements ([7884338](https://forge.dnaka91.rocks/dnaka91/protomd/commit/7884338ee838d1fbee9561956ba2db850ed35140))
+- Replace confique crate with config ([e086d38](https://forge.dnaka91.rocks/dnaka91/protomd/commit/e086d38bc697d232b941fee4e47b8bfe64239750))
+
+### 🐛 Bug Fixes
+
+- *(build)* Adjust the release script to create valid binaries ([11bcb0c](https://forge.dnaka91.rocks/dnaka91/protomd/commit/11bcb0cebacd47a5104c5e9b3cdfbc4220240ae1))
+
+## [0.1.0] - 2025-06-19
 
 ### 🚀 Features
 
