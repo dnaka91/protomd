@@ -9,12 +9,12 @@ protomd /- Markdow generator for Protobuf schema files
 Markdow generator for Protobuf schema files
 .SH OPTIONS
 .TP
-/fB/-I/fR, /fB/-/-include/fR=/fIINCLUDE/fR
+/fB/-I/fR, /fB/-/-include/fR /fI<INCLUDE>/fR
 Directories that will be searched for referenced schema files.
 
 Input files can reference other schemas that might not be part of the total list of input files. Each include path given will be tried when locating the include files.
 .TP
-/fB/-o/fR, /fB/-/-output/-dir/fR=/fIOUTPUT_DIR/fR [default: .]
+/fB/-o/fR, /fB/-/-output/-dir/fR /fI<OUTPUT_DIR>/fR [default: .]
 Directory to write the generated files into.
 
 If the directory doesn/*(Aqt exist, it will be created automatically.
