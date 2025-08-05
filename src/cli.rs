@@ -14,7 +14,7 @@ pub struct Cli {
     ///
     /// Input files can reference other schemas that might not be part of the total list of input
     /// files. Each include path given will be tried when locating the include files.
-    #[arg(short = 'I', long, value_hint = ValueHint::DirPath)]
+    #[arg(long, short = 'I', value_hint = ValueHint::DirPath)]
     pub include: Vec<PathBuf>,
 
     /// Directory to write the generated files into.
@@ -26,7 +26,7 @@ pub struct Cli {
     /// name remain untouched.
     ///
     /// Use the `--clean` flag to wipe the output directory before generating the new files.
-    #[arg(short, long, value_hint = ValueHint::DirPath, default_value_os_t = PathBuf::from("."))]
+    #[arg(long, short, value_hint = ValueHint::DirPath, default_value_os_t = PathBuf::from("."))]
     pub output_dir: PathBuf,
 
     /// Remove any content from the output directory before writing any files to it. This is not
@@ -62,6 +62,23 @@ pub enum Command {
     /// file and then exit.
     Init,
 
+    Templates {
+        /// Force creating files if the target directory isn't empty.
+        #[arg(long, short)]
+        force: bool,
+        /// Directory to create the files in. If the directory doesn't exist already, it'll be
+        /// created.
+        ///
+        /// Creation will be aborted if the directory already contains any other files, unless the
+        /// `force` flag is used.
+        ///
+        /// Note that using a custom directory will require you to update the configuration file
+        /// and set it to point to this directory. Otherwise the directory will not be used when
+        /// searching for the templates in the file system.
+        #[arg(value_hint = ValueHint::DirPath, default_value_os_t = PathBuf::from(".protomd"))]
+        dir: PathBuf,
+    },
+
     /// Print the schema of the template context on STDOUT.
     ///
     /// This documents the structure of the data that is provided to the Jinja template when it is
@@ -73,8 +90,8 @@ pub enum Command {
     /// The completions will be written in the given directory, with an appropriate naming for each
     /// shell type. For example, *.bash, *.elv, *.fish, ...
     Completion {
-        /// Directory to place create the files in. If the directory doesn't exist already, it'll
-        /// be created.
+        /// Directory to create the files in. If the directory doesn't exist already, it'll be
+        /// created.
         ///
         /// Note that any existing file will be overwritten without further confirmation or
         /// warning.
@@ -84,8 +101,8 @@ pub enum Command {
 
     /// Create `man` page files with documentation about all options and subcommands.
     Manpages {
-        /// Directory to place create the files in. If the directory doesn't exist already, it'll
-        /// be created.
+        /// Directory to create the files in. If the directory doesn't exist already, it'll be
+        /// created.
         ///
         /// Note that any existing file will be overwritten without further confirmation or
         /// warning.

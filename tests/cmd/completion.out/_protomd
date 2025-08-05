@@ -38,6 +38,15 @@ _arguments "${_arguments_options[@]}" : /
 '--help[Print help (see more with '/''--help'/'')]' /
 && ret=0
 ;;
+(templates)
+_arguments "${_arguments_options[@]}" : /
+'-f[Force creating files if the target directory isn'/''t empty]' /
+'--force[Force creating files if the target directory isn'/''t empty]' /
+'-h[Print help (see more with '/''--help'/'')]' /
+'--help[Print help (see more with '/''--help'/'')]' /
+'::dir -- Directory to create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
+&& ret=0
+;;
 (schema)
 _arguments "${_arguments_options[@]}" : /
 '-h[Print help (see more with '/''--help'/'')]' /
@@ -48,14 +57,14 @@ _arguments "${_arguments_options[@]}" : /
 _arguments "${_arguments_options[@]}" : /
 '-h[Print help (see more with '/''--help'/'')]' /
 '--help[Print help (see more with '/''--help'/'')]' /
-':dir -- Directory to place create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
+':dir -- Directory to create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
 && ret=0
 ;;
 (manpages)
 _arguments "${_arguments_options[@]}" : /
 '-h[Print help (see more with '/''--help'/'')]' /
 '--help[Print help (see more with '/''--help'/'')]' /
-':dir -- Directory to place create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
+':dir -- Directory to create the files in. If the directory doesn'/''t exist already, it'/''ll be created:_files -/' /
 && ret=0
 ;;
 (help)
@@ -71,6 +80,10 @@ _arguments "${_arguments_options[@]}" : /
         curcontext="${curcontext%:*:*}:protomd-help-command-$line[1]:"
         case $line[1] in
             (init)
+_arguments "${_arguments_options[@]}" : /
+&& ret=0
+;;
+(templates)
 _arguments "${_arguments_options[@]}" : /
 && ret=0
 ;;
@@ -103,6 +116,7 @@ esac
 _protomd_commands() {
     local commands; commands=(
 'init:Initialize a new configuration file under the current working directory' /
+'templates:' /
 'schema:Print the schema of the template context on STDOUT' /
 'completion:Create shell completion scripts for all supported shells' /
 'manpages:Create /`man/` page files with documentation about all options and subcommands' /
@@ -119,6 +133,7 @@ _protomd__completion_commands() {
 _protomd__help_commands() {
     local commands; commands=(
 'init:Initialize a new configuration file under the current working directory' /
+'templates:' /
 'schema:Print the schema of the template context on STDOUT' /
 'completion:Create shell completion scripts for all supported shells' /
 'manpages:Create /`man/` page files with documentation about all options and subcommands' /
@@ -151,6 +166,11 @@ _protomd__help__schema_commands() {
     local commands; commands=()
     _describe -t commands 'protomd help schema commands' commands "$@"
 }
+(( $+functions[_protomd__help__templates_commands] )) ||
+_protomd__help__templates_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd help templates commands' commands "$@"
+}
 (( $+functions[_protomd__init_commands] )) ||
 _protomd__init_commands() {
     local commands; commands=()
@@ -165,6 +185,11 @@ _protomd__manpages_commands() {
 _protomd__schema_commands() {
     local commands; commands=()
     _describe -t commands 'protomd schema commands' commands "$@"
+}
+(( $+functions[_protomd__templates_commands] )) ||
+_protomd__templates_commands() {
+    local commands; commands=()
+    _describe -t commands 'protomd templates commands' commands "$@"
 }
 
 if [ "$funcstack[1]" = "_protomd" ]; then

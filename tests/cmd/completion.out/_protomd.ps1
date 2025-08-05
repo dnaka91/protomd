@@ -29,6 +29,7 @@ Register-ArgumentCompleter -Native -CommandName 'protomd' -ScriptBlock {
             [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
             [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
             [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Initialize a new configuration file under the current working directory')
+            [CompletionResult]::new('templates', 'templates', [CompletionResultType]::ParameterValue, 'templates')
             [CompletionResult]::new('schema', 'schema', [CompletionResultType]::ParameterValue, 'Print the schema of the template context on STDOUT')
             [CompletionResult]::new('completion', 'completion', [CompletionResultType]::ParameterValue, 'Create shell completion scripts for all supported shells')
             [CompletionResult]::new('manpages', 'manpages', [CompletionResultType]::ParameterValue, 'Create `man` page files with documentation about all options and subcommands')
@@ -36,6 +37,13 @@ Register-ArgumentCompleter -Native -CommandName 'protomd' -ScriptBlock {
             break
         }
         'protomd;init' {
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
+            break
+        }
+        'protomd;templates' {
+            [CompletionResult]::new('-f', '-f', [CompletionResultType]::ParameterName, 'Force creating files if the target directory isn''t empty')
+            [CompletionResult]::new('--force', '--force', [CompletionResultType]::ParameterName, 'Force creating files if the target directory isn''t empty')
             [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
             [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help (see more with ''--help'')')
             break
@@ -57,6 +65,7 @@ Register-ArgumentCompleter -Native -CommandName 'protomd' -ScriptBlock {
         }
         'protomd;help' {
             [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Initialize a new configuration file under the current working directory')
+            [CompletionResult]::new('templates', 'templates', [CompletionResultType]::ParameterValue, 'templates')
             [CompletionResult]::new('schema', 'schema', [CompletionResultType]::ParameterValue, 'Print the schema of the template context on STDOUT')
             [CompletionResult]::new('completion', 'completion', [CompletionResultType]::ParameterValue, 'Create shell completion scripts for all supported shells')
             [CompletionResult]::new('manpages', 'manpages', [CompletionResultType]::ParameterValue, 'Create `man` page files with documentation about all options and subcommands')
@@ -64,6 +73,9 @@ Register-ArgumentCompleter -Native -CommandName 'protomd' -ScriptBlock {
             break
         }
         'protomd;help;init' {
+            break
+        }
+        'protomd;help;templates' {
             break
         }
         'protomd;help;schema' {

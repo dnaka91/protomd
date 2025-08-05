@@ -25,10 +25,15 @@ mod filters {
 pub struct Env(Environment<'static>);
 
 impl Env {
-    pub fn new() -> Result<Self> {
+    pub fn new(template_dir: Option<&str>) -> Result<Self> {
         let mut env = Environment::new();
         env.add_filter("slugify", filters::slugify);
-        env.add_template("package.md.j2", include_str!("../templates/package.md.j2"))?;
+
+        if let Some(dir) = template_dir {
+            env.set_loader(minijinja::path_loader(dir));
+        } else {
+            env.add_template("package.md.j2", include_str!("../templates/package.md.j2"))?;
+        }
 
         Ok(Self(env))
     }

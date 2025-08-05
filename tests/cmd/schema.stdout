@@ -35,6 +35,13 @@
           "type": "string",
           "default": ""
         },
+        "templates": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
         "markdownlint": {
           "description": "Configuration for `markdownlint`.",
           "$ref": "#/$defs/Markdownlint",

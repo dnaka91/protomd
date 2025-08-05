@@ -26,12 +26,19 @@ set edit:completion:arg-completer[protomd] = {|@words|
             cand -h 'Print help (see more with ''--help'')'
             cand --help 'Print help (see more with ''--help'')'
             cand init 'Initialize a new configuration file under the current working directory'
+            cand templates 'templates'
             cand schema 'Print the schema of the template context on STDOUT'
             cand completion 'Create shell completion scripts for all supported shells'
             cand manpages 'Create `man` page files with documentation about all options and subcommands'
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'protomd;init'= {
+            cand -h 'Print help (see more with ''--help'')'
+            cand --help 'Print help (see more with ''--help'')'
+        }
+        &'protomd;templates'= {
+            cand -f 'Force creating files if the target directory isn''t empty'
+            cand --force 'Force creating files if the target directory isn''t empty'
             cand -h 'Print help (see more with ''--help'')'
             cand --help 'Print help (see more with ''--help'')'
         }
@@ -49,12 +56,15 @@ set edit:completion:arg-completer[protomd] = {|@words|
         }
         &'protomd;help'= {
             cand init 'Initialize a new configuration file under the current working directory'
+            cand templates 'templates'
             cand schema 'Print the schema of the template context on STDOUT'
             cand completion 'Create shell completion scripts for all supported shells'
             cand manpages 'Create `man` page files with documentation about all options and subcommands'
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'protomd;help;init'= {
+        }
+        &'protomd;help;templates'= {
         }
         &'protomd;help;schema'= {
         }

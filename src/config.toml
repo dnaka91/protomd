@@ -8,6 +8,12 @@
 ## frontmatter = "outline: [2, 4]"
 frontmatter = ""
 
+## Optional directory to load templates from.
+##
+## By default, the embedded templates are used to render Markdown files. However, if this setting is
+## used the templates are loaded from the file system at the given directory instead.
+# templates = ".protomd"
+
 ## Configuration for `markdownlint`.
 [markdownlint]
 ## List of rules to disable.

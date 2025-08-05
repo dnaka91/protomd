@@ -1,0 +1,22 @@
+.ie /n(.g .ds Aq /(aq
+.el .ds Aq '
+.TH protomd-templates 1  "templates " 
+.SH NAME
+protomd/-templates
+.SH SYNOPSIS
+/fBprotomd templates/fR [/fB/-f/fR|/fB/-/-force/fR] [/fB/-h/fR|/fB/-/-help/fR] [/fIDIR/fR] 
+.SH DESCRIPTION
+.SH OPTIONS
+.TP
+/fB/-f/fR, /fB/-/-force/fR
+Force creating files if the target directory isn/*(Aqt empty
+.TP
+/fB/-h/fR, /fB/-/-help/fR
+Print help (see a summary with /*(Aq/-h/*(Aq)
+.TP
+[/fIDIR/fR] [default: .protomd]
+Directory to create the files in. If the directory doesn/*(Aqt exist already, it/*(Aqll be created.
+
+Creation will be aborted if the directory already contains any other files, unless the `force` flag is used.
+
+Note that using a custom directory will require you to update the configuration file and set it to point to this directory. Otherwise the directory will not be used when searching for the templates in the file system.

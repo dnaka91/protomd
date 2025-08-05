@@ -31,6 +31,9 @@ _protomd() {
             protomd,schema)
                 cmd="protomd__schema"
                 ;;
+            protomd,templates)
+                cmd="protomd__templates"
+                ;;
             protomd__help,completion)
                 cmd="protomd__help__completion"
                 ;;
@@ -46,6 +49,9 @@ _protomd() {
             protomd__help,schema)
                 cmd="protomd__help__schema"
                 ;;
+            protomd__help,templates)
+                cmd="protomd__help__templates"
+                ;;
             *)
                 ;;
         esac
@@ -53,7 +59,7 @@ _protomd() {
 
     case "${cmd}" in
         protomd)
-            opts="-I -o -h --include --output-dir --clean --help [INPUT]... init schema completion manpages help"
+            opts="-I -o -h --include --output-dir --clean --help [INPUT]... init templates schema completion manpages help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -109,7 +115,7 @@ _protomd() {
             return 0
             ;;
         protomd__help)
-            opts="init schema completion manpages help"
+            opts="init templates schema completion manpages help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -192,6 +198,20 @@ _protomd() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
+        protomd__help__templates)
+            opts=""
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
         protomd__init)
             opts="-h --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
@@ -222,6 +242,20 @@ _protomd() {
             ;;
         protomd__schema)
             opts="-h --help"
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        protomd__templates)
+            opts="-f -h --force --help [DIR]"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

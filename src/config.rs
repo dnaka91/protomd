@@ -15,6 +15,8 @@ pub struct Config {
     /// frontmatter = "outline: [2, 4]"
     #[serde(default)]
     pub frontmatter: String,
+    #[serde(default)]
+    pub templates: Option<String>,
     /// Configuration for `markdownlint`.
     #[serde(default)]
     pub markdownlint: Markdownlint,

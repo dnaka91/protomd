@@ -37,6 +37,7 @@ fn main() -> Result<()> {
     if let Some(cmd) = cli.cmd {
         match cmd {
             Command::Init => init()?,
+            Command::Templates { dir, force } => templates(&dir, force)?,
             Command::Schema => schema()?,
             Command::Completion { dir } => cli::completion(&dir)?,
             Command::Manpages { dir } => cli::manpages(&dir)?,
@@ -48,7 +49,12 @@ fn main() -> Result<()> {
     let config = config::load()?;
 
     let packages = collect(cli.include, cli.input, &config)?;
-    render(cli.clean, &cli.output_dir, packages)?;
+    render(
+        cli.clean,
+        &cli.output_dir,
+        packages,
+        config.templates.as_deref(),
+    )?;
 
     Ok(())
 }
@@ -84,14 +90,19 @@ fn collect(include: Vec<PathBuf>, input: Vec<PathBuf>, config: &Config) -> Resul
     Ok(templates)
 }
 
-fn render(clean: bool, output_dir: &Path, templates: Vec<Package>) -> Result<()> {
+fn render(
+    clean: bool,
+    output_dir: &Path,
+    templates: Vec<Package>,
+    template_dir: Option<&str>,
+) -> Result<()> {
     if clean {
         clean_output(output_dir)?;
     }
 
     fs::create_dir_all(output_dir).ok();
 
-    let env = templates::Env::new()?;
+    let env = templates::Env::new(template_dir)?;
 
     templates.into_par_iter().try_for_each(|template| {
         let output_name = template.file_name();
@@ -175,11 +186,25 @@ fn should_generate(metadata: &HashMap<&str, &FileMetadata>, file: &FileDescripto
 }
 
 fn init() -> Result<()> {
-    if std::fs::exists("protomd.toml")? {
+    if fs::exists("protomd.toml")? {
         bail!("A configuration file `protomd.toml` already exists");
     }
 
-    std::fs::write("protomd.toml", config::template())?;
+    fs::write("protomd.toml", config::template())?;
+    Ok(())
+}
+
+fn templates(dir: &Path, force: bool) -> Result<()> {
+    if !force && fs::exists(dir)? && fs::read_dir(dir)?.count() != 0 {
+        bail!("The template directory is not empty");
+    }
+
+    fs::create_dir_all(dir)?;
+    fs::write(
+        dir.join("package.md.j2"),
+        include_str!("../templates/package.md.j2").as_bytes(),
+    )?;
+
     Ok(())
 }
 
