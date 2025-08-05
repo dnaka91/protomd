@@ -96,7 +96,7 @@ def build-asset [tag: string]: string -> list<path> {
 
 def create-tag [ tag:string]: nothing -> nothing {
   print $"(ansi gb)==>(ansi w) creating tag (ansi bb)($tag)(ansi reset)"
-  git tag $tag
+  git tag $tag --sign --message $"chore: release ($tag)"
   git push --tags
 }
 
