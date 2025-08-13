@@ -1,6 +1,5 @@
 use std::io::Write;
 
-use anyhow::{Context, Result};
 use indexmap::IndexMap;
 use itertools::Itertools;
 use minijinja::Environment;
@@ -13,7 +12,9 @@ use protox::{
 };
 use schemars::JsonSchema;
 use serde::Serialize;
+use snafu::{OptionExt, ResultExt, Snafu};
 
+use crate::Result;
 use crate::config;
 
 mod filters {
@@ -24,6 +25,14 @@ mod filters {
 
 pub struct Env(Environment<'static>);
 
+#[derive(Debug, Snafu)]
+pub enum RenderError {
+    #[snafu(display("missing or invalid template"))]
+    Resolve { source: minijinja::Error },
+    #[snafu(display("failed rendering"))]
+    Render { source: minijinja::Error },
+}
+
 impl Env {
     pub fn new(template_dir: Option<&str>) -> Result<Self> {
         let mut env = Environment::new();
@@ -32,18 +41,20 @@ impl Env {
         if let Some(dir) = template_dir {
             env.set_loader(minijinja::path_loader(dir));
         } else {
-            env.add_template("package.md.j2", include_str!("../templates/package.md.j2"))?;
+            env.add_template("package.md.j2", include_str!("../templates/package.md.j2"))
+                .whatever_context("invalid template")?;
         }
 
         Ok(Self(env))
     }
 
-    pub fn render(&self, package: Package, writer: impl Write) -> Result<()> {
+    pub fn render(&self, package: Package, writer: impl Write) -> Result<(), RenderError> {
         self.0
-            .get_template("package.md.j2")?
+            .get_template("package.md.j2")
+            .context(ResolveSnafu)?
             .render_to_write(package, writer)
             .map(|_| ())
-            .map_err(Into::into)
+            .context(RenderSnafu)
     }
 }
 
@@ -103,7 +114,7 @@ impl Service {
             .parent_file_descriptor_proto()
             .source_code_info
             .as_ref()
-            .context("missing source info")?;
+            .whatever_context("missing source info")?;
 
         let description = source
             .location
@@ -165,7 +176,7 @@ impl Method {
             .file_descriptor_proto()
             .source_code_info
             .as_ref()
-            .context("missing source info")?;
+            .whatever_context("missing source info")?;
 
         let description = source
             .location
@@ -207,19 +218,21 @@ struct Message {
 impl Message {
     fn new(resolver: &impl FileResolver, value: &CombinedDescriptor) -> Result<Self> {
         let source = value.parent_file();
-        let file = resolver.open_file(source.name())?;
+        let file = resolver
+            .open_file(source.name())
+            .whatever_context("failed resolving file")?;
 
         let source_info = source
             .file_descriptor_proto()
             .source_code_info
             .as_ref()
-            .context("missing source info")?;
+            .whatever_context("missing source info")?;
 
         let location = source_info
             .location
             .iter()
             .find(|l| l.path == value.path())
-            .context("missing location for message")?;
+            .whatever_context("missing location for message")?;
 
         let description = unindent::unindent(location.leading_comments().trim());
         let proto = file

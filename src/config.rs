@@ -1,7 +1,7 @@
-use anyhow::Result;
 use config::{Case, Environment, File};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use snafu::{ResultExt, Snafu};
 
 /// Configuration for the protomd Protobuf Markdown generator.
 #[derive(Clone, Default, Deserialize, JsonSchema, Serialize)]
@@ -55,14 +55,21 @@ pub struct RequestSymbols {
     pub bidi_streaming: Option<String>,
 }
 
-pub fn load() -> Result<Config> {
+#[derive(Debug, Snafu)]
+pub enum LoadError {
+    Build { source: config::ConfigError },
+    Deserialize { source: config::ConfigError },
+}
+
+pub fn load() -> Result<Config, LoadError> {
     config::Config::builder()
         .add_source(File::with_name(".config/protomd.toml").required(false))
         .add_source(File::with_name("protomd.toml").required(false))
         .add_source(Environment::with_prefix("PROTOMD_").convert_case(Case::ScreamingSnake))
-        .build()?
+        .build()
+        .context(BuildSnafu)?
         .try_deserialize()
-        .map_err(Into::into)
+        .context(DeserializeSnafu)
 }
 
 pub fn template() -> &'static str {
@@ -76,7 +83,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn deser_default() -> Result<()> {
+    fn deser_default() -> Result<(), config::ConfigError> {
         let cfg = config::Config::builder()
             .add_source(File::from_str(template(), FileFormat::Toml))
             .build()?
