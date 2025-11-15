@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2025-11-15
+
+### 🚀 Features
+
+- Support reading custom templates ([11531ca](https://forge.dnaka91.rocks/dnaka91/protomd/commit/11531ca9f184b97a3c4a24485aa97524eb734901))
+
+### 🚜 Refactor
+
+- Replace anyhow with snafu ([de9eaee](https://forge.dnaka91.rocks/dnaka91/protomd/commit/de9eaeee584658482a3234e3c65f9ca03b5fcdc9))
+
+### ⚙️ Miscellaneous Tasks
+
+- Sign git tags ([9672a55](https://forge.dnaka91.rocks/dnaka91/protomd/commit/9672a55bb6e00b458766735fa4c5960f4e0a2aaa))
+
 ## [0.2.0] - 2025-07-06
 
 ### 🚀 Features

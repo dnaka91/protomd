@@ -73,6 +73,7 @@ def build-asset [tag: string]: string -> list<path> {
   let tar_file  = $"($base_name).tar"
   let zst_file  = $"($tar_file).zst"
   let chk_file = $"($base_name).sha512"
+  let target_dir = (cargo metadata | from json | get target_directory)
 
   print $"(ansi gb)==>(ansi w) building target (ansi bb)($target)(ansi reset)"
 
@@ -83,7 +84,7 @@ def build-asset [tag: string]: string -> list<path> {
   (
     tar --create
       --file ($dir | path join $tar_file)
-      --directory $"target/($target)/release"
+      --directory $"($target_dir)/($target)/release"
       $"protomd(if ($target | str contains "windows") { ".exe" })"
   )
 
