@@ -5,8 +5,8 @@ module completions {
     --include(-I): path       # Directories that will be searched for referenced schema files
     --output-dir(-o): path    # Directory to write the generated files into
     --clean                   # Remove any content from the output directory before writing any files to it. This is not done when the output directory points to the current directory
-    ...input: path            # Input files or folders to generate the documentation from
     --help(-h)                # Print help (see more with '--help')
+    ...input: path            # Input files or folders to generate the documentation from
   ]
 
   # Initialize a new configuration file under the current working directory
@@ -16,8 +16,8 @@ module completions {
 
   export extern "protomd templates" [
     --force(-f)               # Force creating files if the target directory isn't empty
-    dir?: path                # Directory to create the files in. If the directory doesn't exist already, it'll be created
     --help(-h)                # Print help (see more with '--help')
+    dir?: path                # Directory to create the files in. If the directory doesn't exist already, it'll be created
   ]
 
   # Print the schema of the template context on STDOUT
@@ -27,14 +27,14 @@ module completions {
 
   # Create shell completion scripts for all supported shells
   export extern "protomd completion" [
-    dir: path                 # Directory to create the files in. If the directory doesn't exist already, it'll be created
     --help(-h)                # Print help (see more with '--help')
+    dir: path                 # Directory to create the files in. If the directory doesn't exist already, it'll be created
   ]
 
   # Create `man` page files with documentation about all options and subcommands
   export extern "protomd manpages" [
-    dir: path                 # Directory to create the files in. If the directory doesn't exist already, it'll be created
     --help(-h)                # Print help (see more with '--help')
+    dir: path                 # Directory to create the files in. If the directory doesn't exist already, it'll be created
   ]
 
   # Print this message or the help of the given subcommand(s)
