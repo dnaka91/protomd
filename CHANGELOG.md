@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2025-11-15
+
+### 🧪 Testing
+
+- Re-generate test outputs ([51d26aa](https://forge.dnaka91.rocks/dnaka91/protomd/commit/51d26aaf111150d37c9abdeb7c75c65c1477e415))
+
 ## [0.2.1] - 2025-11-15
 
 ### 🚀 Features
